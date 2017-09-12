@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <script type="text/javascript">
+
+function sum(){
+var arr = [1,2,3,4];
+var total=0;
+for(var i in arr) { total += arr[i]; }
+document.getElementById("as").innerHTML=total;
+}
+    </script>
+  </head>
+  <body>
+
+    <div id="as"></div>
+    <button type="button" name="button" onclick="sum()">submit</button>
+  </body>
+</html>

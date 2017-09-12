@@ -1,0 +1,115 @@
+ng-scope
+test-top-bar
+left-box
+time-control-details
+test-timer-play-pause
+btn play-pause
+tb-icon tb-play
+tb-icon tb-pause
+tb-icon tb-check
+time-name
+time
+name
+calci-btn
+btn
+tb-icon tb-calculator visible-xs
+right-box
+btn rb-btn test-btn-style
+test-content-container
+test-section-bar
+test-sections
+scroll-gradient left
+ts-inner
+each
+btn active
+dropdown-menu question-states-menu
+d-arrow
+skipped
+icon
+unseen
+count
+answered
+marked
+scroll-gradient right
+dropdown select-language
+lang-select-btn dropdown-toggle test-btn-style
+language-selector id
+ng-binding
+tb-icon tb-arrow-down-thin
+dropdown-menu dropdown-menu-right
+d-arrow
+inner-container js-que-ans-view
+content-view test-question-list
+inner-container js-que-ans-
+row
+col-xs-12 content-height-fixer slim-scrollbar
+test-ql-title
+section-que-container
+list-choices
+list-option
+que-label ql-small
+que-label ql-small js-que-current
+test-action-controls text-center
+button
+btn btn-gray-1 text-uppercase
+content-view test-question-view
+content-height-fixer question-answer-box on-test-page slim-scrollbar
+q-badge
+question-box
+col-xs-12 qb-header
+tb-icon tb-bookmark
+que-time
+que-marking-scheme
+pos
+neg
+right-box
+col-xs-12 que-action-options
+mark-review-btn test-btn-style
+button
+ tb-report-component dropdown
+btn btn-round btn-sm dropdown-toggle
+dropdown
+tb-icon tb-more
+report
+dropdown-menu dropdown-menu-right
+col-xs-12 qb-body
+complete-que-content
+answer-box
+list-choices
+list-option
+que-label ql-small
+q-badge
+list-content
+test-action-controls
+button
+btn btn-gray-1 text-uppercase mark-next
+btn btn-link text-uppercase clear-selection
+tb-icon tb-clear
+btn btn-test-primary text-uppercase pull-right save-next
+test-content-backdrop
+
+col-xs-12
+question-list
+que-label ql-large js-que-current
+open-test-sidebar
+tb-icon tb-menu
+test-sidebar
+btn close-sidebar
+list-unstyled nav-sections list-view-deactive
+tb-icon tb-bullet-list
+tb-icon tb-grid
+section-question-list slim-scrollbar
+accordion
+
+course-accordion each-section 
+accordion-head header active
+section-details
+tb-icon tb-arrow-right-b triangle-icon
+name
+time-spent js-limited-time
+comp-status
+question-states-menu inline-menu mar-t8
+accordion-content body
+
+que-title
+que-label ql-large  js-que-current

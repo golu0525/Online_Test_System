@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>TestSprint</title>
+<link rel="stylesheet" href="./css/normalize.css">
+<link rel="stylesheet" href="./css/style.css">
+</head>
+<body ng-app="testApp" ng-class="baseUIClassName" class="ng-scope">
+    <div style="visibility: hidden; overflow: hidden; position: absolute; top: 0px; height: 1px; width: auto; padding: 0px; border: 0px; margin: 0px; text-align: left; text-indent: 0px; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal;">
+        <div id="MathJax_Hidden"><br></div>
+    </div>
+    <div id="MathJax_Message" style="display: none;"></div>
+    <!--conditional class "js-ssc-exam-ui"-->
+
+    <!-- ngView:  -->
+    <div ng-view="" class="ng-scope">
+        <div class="test-top-bar ng-scope" ng-show="isInitialized()">
+            <div class="left-box">
+                <div class="time-control-details">
+                    <div class="test-timer-play-pause">
+                        <button type="button" class="btn play-pause" ng-click="pauseBtnPressed()" ng-class="{&#39;js-paused&#39;: isTimerPaused, &#39;js-submitted&#39;: isTestSubmitted}">
+                    <i class="tb-icon tb-play"></i>
+                    <i class="tb-icon tb-pause"></i>
+                    <i class="tb-icon tb-check"></i>
+                </button>
+                    </div>
+                    <div class="time-name">
+                        <span class="time">
+                    <count-down-timer test-duration="1800" is-test-submitted="false" is-timer-paused="false" test-time-over-ptr="testTimeOver" resume-ptr="resumeTimerCB" hide-zero="n" class="ng-binding ng-isolate-scope"><no-style ng-show="isVisible(TH)" class="ng-binding">00:</no-style>29:51</count-down-timer>
+                </span>
+                        <span class="name ng-binding">Course name</span>
+                    </div>
+                </div>
+                <div class="calci-btn">
+                    <button class="btn ng-hide" ng-show="isGateExam" ng-click="showCalculator()"><span class="hidden-xs">Calculator</span> <i class="tb-icon tb-calculator visible-xs"></i></button>
+                </div>
+            </div>
+            <div class="right-box">
+                <button class="btn rb-btn test-btn-style" type="button" ng-click="submitBtnPressed()">SUBMIT TEST</button>
+            </div>
+        </div>
+
+        <div class="test-content-container ng-scope" ng-class="{&#39;sidebar-open&#39;: isSideBarOpen}" ng-show="isInitialized()">
+            <div class="test-section-bar">
+                <div class="test-sections">
+                    <div class="scroll-gradient left"></div>
+                    <div class="ts-inner">
+                        <!-- ngRepeat: section in test.sections track by $index -->
+                        <div class="each ng-scope ng-hide" ng-repeat="section in test.sections track by $index" ng-hide="test.sections.length ==1 &amp;&amp; section.title ==&#39;&#39;">
+                            <button type="button" class="btn active" ng-class="{&#39;active&#39; : currentQuestion.sSNo -1 == $index, &#39;disabled&#39;: !isActiveSection($index)}" ng-click="jumpToLastViewedQuestionInSection($index + 1)">
+                        <span class="name ng-binding"></span>
+                    </button>
+                            <!-- conditional class "disabled"  on button-->
+                            <ul class="dropdown-menu question-states-menu">
+                                <li class="d-arrow"></li>
+                                <li class="skipped"><span class="icon"></span>Skipped<span class="count ng-binding">0</span>
+                                </li>
+                                <li class="unseen"><span class="icon"></span>Unseen<span class="count ng-binding">15</span>
+                                </li>
+                                <li class="answered"><span class="icon"></span>Attempted<span class="count ng-binding">0</span>
+                                </li>
+                                <li class="marked"><span class="icon tb-icon tb-bookmark"></span>Marked for Review<span class="count ng-binding">0</span></li>
+                            </ul>
+                        </div>
+                        <!-- end ngRepeat: section in test.sections track by $index -->
+                    </div>
+                    <div class="scroll-gradient right"></div>
+                </div>
+                <div class="dropdown select-language">
+                    <button class="lang-select-btn dropdown-toggle test-btn-style" type="button" id="language-selector" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                <span>View in: </span><span class="ng-binding">English</span>
+                <i class="tb-icon tb-arrow-down-thin"></i>
+            </button>
+                    <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="language-selector">
+                        <li class="d-arrow"></li>
+                        <!-- ngRepeat: l in languages -->
+                        <li ng-repeat="l in languages" ng-class="{&#39;active&#39;: l.name == lang.name, &#39;disabled&#39;:!isTranslationPresent()}" class="ng-scope active disabled">
+                            <a data-href="#" ng-click="setLanguage(l)" ng-disabled="!isTranslationPresent()" class="ng-binding" disabled="disabled">English</a>
+                        </li>
+                        <!-- end ngRepeat: l in languages -->
+                        <li ng-repeat="l in languages" ng-class="{&#39;active&#39;: l.name == lang.name, &#39;disabled&#39;:!isTranslationPresent()}" class="ng-scope disabled">
+                            <a data-href="#" ng-click="setLanguage(l)" ng-disabled="!isTranslationPresent()" class="ng-binding" disabled="disabled">Hindi</a>
+                        </li>
+                        <!-- end ngRepeat: l in languages -->
+                    </ul>
+                </div>
+            </div>
+
+            <div class="inner-container js-que-ans-view" ng-class="{&#39;js-que-ans-view&#39;:!isQuestionPaperVisible, &#39;js-que-list-view&#39;:isQuestionPaperVisible}">
+                <!--condition class " js-que-ans-view  js-que-list-view "-->
+                <div class="content-view test-question-list">
+                    <!--test question list-->
+                    <div class="row">
+                        <div class="col-xs-12 content-height-fixer slim-scrollbar">
+                            <p class="test-ql-title">Question Paper</p>
+
+                            <!-- ngRepeat: section in test.sections track by $index -->
+                            <div class="section-que-container ng-scope" ng-repeat="section in test.sections track by $index" ng-show="isActiveSection($index)">
+                                <h4 class="ng-binding">Section: </h4>
+                                <ul class="list-choices">
+                                    <!-- ngRepeat: question in section.questions track by $index --> 
+                                    <li class="list-option ng-scope" ng-repeat="question in section.questions track by $index" ng-click="questionPaperItemClicked($parent.$index +1, $index+1, false)">
+                                        <div class="que-label ql-small js-que-current" ng-class="{
+                                            &#39;js-que-bookmarked&#39;: isBookmarked($parent.$index +1,  $index+1),
+                                            &#39;js-que-attempted&#39; : isAttempted($parent.$index +1,  $index+1),
+                                            &#39;js-que-skipped&#39; : isSkipped($parent.$index +1,  $index+1),
+                                            &#39;js-que-current&#39;: isCurrentQuestion($parent.$index + 1, $index + 1)
+                                        }">
+                                            <div class="q-badge ng-binding">1<span class="tb-icon tb-bookmark"></span></div>
+                                        </div>
+                                        <div class="list-content ng-binding" ng-bind-html="getQuestionDesc($parent.$index + 1, $index + 1, lang.name)">
+                                            <p>Let <em>g</em>(<em>x</em>) be a function such that <em>g</em>(<em>x</em> + 1) + <em>g</em>(<em>x</em> – 1) = <em>g</em>(<em>x</em>) for every real <em>x</em>. Then for what value of <em>p</em> is the relation <em>g</em>(<em>x</em> + <em>p</em>) = <em>g</em>(<em>x</em>) necessarily true for every real <em>x</em>?</p>
+                                        </div>
+                                    </li>
+                                    <!-- end ngRepeat: question in section.questions track by $index -->
+                                    <li class="list-option ng-scope" ng-repeat="question in section.questions track by $index" ng-click="questionPaperItemClicked($parent.$index +1, $index+1, false)">
+                                        <div class="que-label ql-small" ng-class="{
+                                            &#39;js-que-bookmarked&#39;: isBookmarked($parent.$index +1,  $index+1),
+                                            &#39;js-que-attempted&#39; : isAttempted($parent.$index +1,  $index+1),
+                                            &#39;js-que-skipped&#39; : isSkipped($parent.$index +1,  $index+1),
+                                            &#39;js-que-current&#39;: isCurrentQuestion($parent.$index + 1, $index + 1)
+                                        }">
+                                            <div class="q-badge ng-binding">2<span class="tb-icon tb-bookmark"></span></div>
+                                        </div>
+                                        <div class="list-content ng-binding" ng-bind-html="getQuestionDesc($parent.$index + 1, $index + 1, lang.name)">
+                                            <p>Answer the questions&nbsp;according to the information given below.</p>
+
+                                            <p><span style="font-size:13px">If f(x) = </span><span style="font-size:13px">x</span><sup>3</sup><span style="font-size:13px"> – 4x + p, and f(0) and f(1) are of opposite signs, then which of the following is necessarily true?</span></p>
+                                        </div>
+                                    </li>
+                                    <!-- end ngRepeat: question in section.questions track by $index -->
+                                    <li class="list-option ng-scope" ng-repeat="question in section.questions track by $index" ng-click="questionPaperItemClicked($parent.$index +1, $index+1, false)">
+                                        <div class="que-label ql-small" ng-class="{
+                                            &#39;js-que-bookmarked&#39;: isBookmarked($parent.$index +1,  $index+1),
+                                            &#39;js-que-attempted&#39; : isAttempted($parent.$index +1,  $index+1),
+                                            &#39;js-que-skipped&#39; : isSkipped($parent.$index +1,  $index+1),
+                                            &#39;js-que-current&#39;: isCurrentQuestion($parent.$index + 1, $index + 1)
+                                        }">
+                                            <div class="q-badge ng-binding">3<span class="tb-icon tb-bookmark"></span></div>
+                                        </div>
+                                        <div class="list-content ng-binding" ng-bind-html="getQuestionDesc($parent.$index + 1, $index + 1, lang.name)">
+                                            <p>A quadratic function <em>f</em>(<em>x</em>) attains a maximum of 3 at <em>x</em> = 1. The value of the function at <em>x </em>= 0 is 1. What is the value of<em> f</em>(<em>x</em>) at<em> x </em>= 10?</p>
+                                        </div>
+                                    </li>
+                                    <!-- end ngRepeat: question in section.questions track by $index -->
+                                    <li class="list-option ng-scope" ng-repeat="question in section.questions track by $index" ng-click="questionPaperItemClicked($parent.$index +1, $index+1, false)">
+                                        <div class="que-label ql-small" ng-class="{
+                                            &#39;js-que-bookmarked&#39;: isBookmarked($parent.$index +1,  $index+1),
+                                            &#39;js-que-attempted&#39; : isAttempted($parent.$index +1,  $index+1),
+                                            &#39;js-que-skipped&#39; : isSkipped($parent.$index +1,  $index+1),
+                                            &#39;js-que-current&#39;: isCurrentQuestion($parent.$index + 1, $index + 1)
+                                        }">
+                                            <div class="q-badge ng-binding">4<span class="tb-icon tb-bookmark"></span></div>
+                                        </div>
+                                        <div class="list-content ng-binding" ng-bind-html="getQuestionDesc($parent.$index + 1, $index + 1, lang.name)">
+                                            <p>A function <em>f</em>(<em>x</em>) satisfies <em>f</em> (1) = 3600, and <em>f</em>(l) + <em>f</em>(2) + ... + <em>f</em>(<em>n</em>) = <em>n</em>² <em>f</em>(<em>n</em>), for all positive integers <em>n</em>&gt;1. What is the value of <em>f</em>(9)?</p>
+                                        </div>
+                                    </li>
+                                    <!-- end ngRepeat: question in section.questions track by $index -->
+                                    <li class="list-option ng-scope" ng-repeat="question in section.questions track by $index" ng-click="questionPaperItemClicked($parent.$index +1, $index+1, false)">
+                                        <div class="que-label ql-small" ng-class="{
+                                            &#39;js-que-bookmarked&#39;: isBookmarked($parent.$index +1,  $index+1),
+                                            &#39;js-que-attempted&#39; : isAttempted($parent.$index +1,  $index+1),
+                                            &#39;js-que-skipped&#39; : isSkipped($parent.$index +1,  $index+1),
+                                            &#39;js-que-current&#39;: isCurrentQuestion($parent.$index + 1, $index + 1)
+                                        }">
+                                            <div class="q-badge ng-binding">5<span class="tb-icon tb-bookmark"></span></div>
+                                        </div>
+                                        <div class="list-content ng-binding" ng-bind-html="getQuestionDesc($parent.$index + 1, $index + 1, lang.name)">
+                                            <p><span style="background-color:rgb(249, 249, 249); font-family:helvetica neue,helvetica,arial,sans-serif">Answer the following question according to the information give</span><span style="background-color:rgb(249, 249, 249); font-family:helvetica neue,helvetica,arial,sans-serif">n below</span><span style="background-color:rgb(249, 249, 249); font-family:helvetica neue,helvetica,arial,sans-serif">.</span></p>
+
+                                            <p>For all non-negative integers <em>x</em> and <em>y</em>, f(<em>x</em>, <em>y</em>) is defined as below<br> f(0, <em>y</em>) = <em>y</em> + 1<br>
+                                                <span style="font-size:13px">f(</span><em>x</em><span style="font-size:13px"> + 1, 0) = f(</span><em>x</em><span style="font-size:13px">, 1)</span><br>
+                                                <span style="font-size:13px">f(</span><em>x</em><span style="font-size:13px"> + 1,</span><em>y</em><span style="font-size:13px"> + 1) = f(</span><em>x</em><span style="font-size:13px">, f(</span><em>x</em><span style="font-size:13px"> + 1, </span><em>y</em><span style="font-size:13px">))<br>
+Then, what is the value of f(1, 2)?&nbsp;</span></p>
+
+                                            <p>&nbsp;</p>
+                                        </div>
+                                    </li>
+                                    <!-- end ngRepeat: question in section.questions track by $index -->
+                                    <li class="list-option ng-scope" ng-repeat="question in section.questions track by $index" ng-click="questionPaperItemClicked($parent.$index +1, $index+1, false)">
+                                        <div class="que-label ql-small" ng-class="{
+                                            &#39;js-que-bookmarked&#39;: isBookmarked($parent.$index +1,  $index+1),
+                                            &#39;js-que-attempted&#39; : isAttempted($parent.$index +1,  $index+1),
+                                            &#39;js-que-skipped&#39; : isSkipped($parent.$index +1,  $index+1),
+                                            &#39;js-que-current&#39;: isCurrentQuestion($parent.$index + 1, $index + 1)
+                                        }">
+                                            <div class="q-badge ng-binding">6<span class="tb-icon tb-bookmark"></span></div>
+                                        </div>
+                                        <div class="list-content ng-binding" ng-bind-html="getQuestionDesc($parent.$index + 1, $index + 1, lang.name)">
+                                            <p>Let f(x) be a function whose domain is [-5, 7]. Let g(x) = |2x + 5|, then domain of (fog) (x) is</p>
+                                        </div>
+                                    </li>
+                                    <!-- end ngRepeat: question in section.questions track by $index -->
+                                    <li class="list-option ng-scope" ng-repeat="question in section.questions track by $index" ng-click="questionPaperItemClicked($parent.$index +1, $index+1, false)">
+                                        <div class="que-label ql-small" ng-class="{
+                                            &#39;js-que-bookmarked&#39;: isBookmarked($parent.$index +1,  $index+1),
+                                            &#39;js-que-attempted&#39; : isAttempted($parent.$index +1,  $index+1),
+                                            &#39;js-que-skipped&#39; : isSkipped($parent.$index +1,  $index+1),
+                                            &#39;js-que-current&#39;: isCurrentQuestion($parent.$index + 1, $index + 1)
+                                        }">
+                                            <div class="q-badge ng-binding">7<span class="tb-icon tb-bookmark"></span></div>
+                                        </div>
+                                        <div class="list-content ng-binding" ng-bind-html="getQuestionDesc($parent.$index + 1, $index + 1, lang.name)">
+                                            <p>The range of the function f(x) = log<sub><span style="color:rgb(68, 68, 68); font-family:arial,sans-serif; font-size:small">√</span>2&nbsp;</sub>(2 - log<sub>2</sub>(16sin<sup>2</sup>x + 1)) is</p>
+
+                                            <p>&nbsp;</p>
+                                        </div>
+                                    </li>
+                                    <!-- end ngRepeat: question in section.questions track by $index -->
+                                    <li class="list-option ng-scope" ng-repeat="question in section.questions track by $index" ng-click="questionPaperItemClicked($parent.$index +1, $index+1, false)">
+                                        <div class="que-label ql-small" ng-class="{
+                                            &#39;js-que-bookmarked&#39;: isBookmarked($parent.$index +1,  $index+1),
+                                            &#39;js-que-attempted&#39; : isAttempted($parent.$index +1,  $index+1),
+                                            &#39;js-que-skipped&#39; : isSkipped($parent.$index +1,  $index+1),
+                                            &#39;js-que-current&#39;: isCurrentQuestion($parent.$index + 1, $index + 1)
+                                        }">
+                                            <div class="q-badge ng-binding">8<span class="tb-icon tb-bookmark"></span></div>
+                                        </div>
+                                        <div class="list-content ng-binding" ng-bind-html="getQuestionDesc($parent.$index + 1, $index + 1, lang.name)">
+                                            <p>If f(x) - x<sup>2</sup> - px + q. If f(1) and f(2) are of opposite signs, which of the following cannot be the value of f(0)?</p>
+                                        </div>
+                                    </li>
+                                    <!-- end ngRepeat: question in section.questions track by $index -->
+                                    <li class="list-option ng-scope" ng-repeat="question in section.questions track by $index" ng-click="questionPaperItemClicked($parent.$index +1, $index+1, false)">
+                                        <div class="que-label ql-small" ng-class="{
+                                            &#39;js-que-bookmarked&#39;: isBookmarked($parent.$index +1,  $index+1),
+                                            &#39;js-que-attempted&#39; : isAttempted($parent.$index +1,  $index+1),
+                                            &#39;js-que-skipped&#39; : isSkipped($parent.$index +1,  $index+1),
+                                            &#39;js-que-current&#39;: isCurrentQuestion($parent.$index + 1, $index + 1)
+                                        }">
+                                            <div class="q-badge ng-binding">9<span class="tb-icon tb-bookmark"></span></div>
+                                        </div>
+                                        <div class="list-content ng-binding" ng-bind-html="getQuestionDesc($parent.$index + 1, $index + 1, lang.name)">
+                                            <p><strong>Choose the correct alternative.</strong></p>
+
+                                            <p>a @ b = ab – 1; if a &gt; b</p>
+
+                                            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 0; otherwise&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+
+                                            <p>and a x b = (a + b) / (a – b) ; if&nbsp; a ≥ 0, b ≥ 0</p>
+
+                                            <p style="margin-left:80px">= 1; otherwise</p>
+
+                                            <p>Find the value of&nbsp; <img id="_x0000_i1025" src="file://localhost/Users/munna/Library/Caches/TemporaryItems/msoclip/0/clip_image001.png" style="height:29px"><span class="math-tex"><span class="MathJax_Preview" style="color: inherit; display: none;"></span><span class="MathJax" id="MathJax-Element-1-Frame" tabindex="0" data-mathml="&lt;math xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;&gt;&lt;mfrac&gt;&lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;&lt;mrow&gt;&lt;mo&gt;[&lt;/mo&gt;&lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;&lt;mn&gt;4&lt;/mn&gt;&lt;mo&gt;&amp;#x00D7;&lt;/mo&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;/mrow&gt;&lt;mo&gt;]&lt;/mo&gt;&lt;/mrow&gt;&lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;&lt;mo&gt;@&lt;/mo&gt;&lt;/mrow&gt;&lt;mrow&gt;&lt;mo&gt;[&lt;/mo&gt;&lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;&lt;mn&gt;9&lt;/mn&gt;&lt;mo&gt;&amp;#x00D7;&lt;/mo&gt;&lt;mrow&gt;&lt;mo&gt;(&lt;/mo&gt;&lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;&lt;mo&gt;&amp;#x2212;&lt;/mo&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;/mrow&gt;&lt;mo&gt;)&lt;/mo&gt;&lt;/mrow&gt;&lt;/mrow&gt;&lt;mo&gt;]&lt;/mo&gt;&lt;/mrow&gt;&lt;/mrow&gt;&lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;&lt;mrow&gt;&lt;mo&gt;[&lt;/mo&gt;&lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;&lt;mo&gt;@&lt;/mo&gt;&lt;/mrow&gt;&lt;mn&gt;3&lt;/mn&gt;&lt;/mrow&gt;&lt;mo&gt;]&lt;/mo&gt;&lt;/mrow&gt;&lt;mo&gt;&amp;#x00D7;&lt;/mo&gt;&lt;mrow&gt;&lt;mo&gt;[&lt;/mo&gt;&lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;&lt;mn&gt;5&lt;/mn&gt;&lt;mrow class=&quot;MJX-TeXAtom-ORD&quot;&gt;&lt;mo&gt;@&lt;/mo&gt;&lt;/mrow&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;/mrow&gt;&lt;mo&gt;]&lt;/mo&gt;&lt;/mrow&gt;&lt;/mrow&gt;&lt;/mfrac&gt;&lt;/math&gt;" role="presentation" style="position: relative;"><nobr aria-hidden="true"><span class="math" id="MathJax-Span-1" style="width: 6.502em; display: inline-block;"><span style="display: inline-block; position: relative; width: 5.331em; height: 0px; font-size: 122%;"><span style="position: absolute; clip: rect(0.881em 1005.33em 2.989em -999.997em); top: -2.163em; left: 0em;"><span class="mrow" id="MathJax-Span-2"><span class="mfrac" id="MathJax-Span-3"><span style="display: inline-block; position: relative; width: 5.097em; height: 0px; margin-right: 0.12em; margin-left: 0.12em;"><span style="position: absolute; clip: rect(3.282em 1004.86em 4.335em -999.997em); top: -4.564em; left: 50%; margin-left: -2.456em;"><span class="texatom" id="MathJax-Span-4"><span class="mrow" id="MathJax-Span-5"><span class="mrow" id="MathJax-Span-6"><span class="mo" id="MathJax-Span-7" style="font-size: 70.7%; font-family: MathJax_Main;">[</span><span class="texatom" id="MathJax-Span-8"><span class="mrow" id="MathJax-Span-9"><span class="mn" id="MathJax-Span-10" style="font-size: 70.7%; font-family: MathJax_Main;">4</span><span class="mo" id="MathJax-Span-11" style="font-size: 70.7%; font-family: MathJax_Main;">×</span><span class="mn" id="MathJax-Span-12" style="font-size: 70.7%; font-family: MathJax_Main;">2</span></span>
+                                                </span><span class="mo" id="MathJax-Span-13" style="font-size: 70.7%; font-family: MathJax_Main;">]</span></span><span class="texatom" id="MathJax-Span-14"><span class="mrow" id="MathJax-Span-15"><span class="mo" id="MathJax-Span-16" style="font-size: 70.7%; font-family: MathJax_Main;">@</span></span>
+                                                </span><span class="mrow" id="MathJax-Span-17"><span class="mo" id="MathJax-Span-18" style="font-size: 70.7%; font-family: MathJax_Main;">[</span><span class="texatom" id="MathJax-Span-19"><span class="mrow" id="MathJax-Span-20"><span class="mn" id="MathJax-Span-21" style="font-size: 70.7%; font-family: MathJax_Main;">9</span><span class="mo" id="MathJax-Span-22" style="font-size: 70.7%; font-family: MathJax_Main;">×</span><span class="mrow" id="MathJax-Span-23"><span class="mo" id="MathJax-Span-24" style="font-size: 70.7%; font-family: MathJax_Main;">(</span><span class="texatom" id="MathJax-Span-25"><span class="mrow" id="MathJax-Span-26"><span class="mo" id="MathJax-Span-27" style="font-size: 70.7%; font-family: MathJax_Main;">−</span><span class="mn" id="MathJax-Span-28" style="font-size: 70.7%; font-family: MathJax_Main;">1</span></span>
+                                                </span><span class="mo" id="MathJax-Span-29" style="font-size: 70.7%; font-family: MathJax_Main;">)</span></span>
+                                                </span>
+                                                </span><span class="mo" id="MathJax-Span-30" style="font-size: 70.7%; font-family: MathJax_Main;">]</span></span>
+                                                </span>
+                                                </span><span style="display: inline-block; width: 0px; height: 3.984em;"></span></span><span style="position: absolute; clip: rect(3.282em 1003.75em 4.335em -999.997em); top: -3.51em; left: 50%; margin-left: -1.929em;"><span class="texatom" id="MathJax-Span-31"><span class="mrow" id="MathJax-Span-32"><span class="mrow" id="MathJax-Span-33"><span class="mo" id="MathJax-Span-34" style="font-size: 70.7%; font-family: MathJax_Main;">[</span><span class="texatom" id="MathJax-Span-35"><span class="mrow" id="MathJax-Span-36"><span class="mn" id="MathJax-Span-37" style="font-size: 70.7%; font-family: MathJax_Main;">2</span><span class="texatom" id="MathJax-Span-38"><span class="mrow" id="MathJax-Span-39"><span class="mo" id="MathJax-Span-40" style="font-size: 70.7%; font-family: MathJax_Main;">@</span></span>
+                                                </span><span class="mn" id="MathJax-Span-41" style="font-size: 70.7%; font-family: MathJax_Main;">3</span></span>
+                                                </span><span class="mo" id="MathJax-Span-42" style="font-size: 70.7%; font-family: MathJax_Main;">]</span></span><span class="mo" id="MathJax-Span-43" style="font-size: 70.7%; font-family: MathJax_Main;">×</span><span class="mrow" id="MathJax-Span-44"><span class="mo" id="MathJax-Span-45" style="font-size: 70.7%; font-family: MathJax_Main;">[</span><span class="texatom" id="MathJax-Span-46"><span class="mrow" id="MathJax-Span-47"><span class="mn" id="MathJax-Span-48" style="font-size: 70.7%; font-family: MathJax_Main;">5</span><span class="texatom" id="MathJax-Span-49"><span class="mrow" id="MathJax-Span-50"><span class="mo" id="MathJax-Span-51" style="font-size: 70.7%; font-family: MathJax_Main;">@</span></span>
+                                                </span><span class="mn" id="MathJax-Span-52" style="font-size: 70.7%; font-family: MathJax_Main;">2</span></span>
+                                                </span><span class="mo" id="MathJax-Span-53" style="font-size: 70.7%; font-family: MathJax_Main;">]</span></span>
+                                                </span>
+                                                </span><span style="display: inline-block; width: 0px; height: 3.984em;"></span></span><span style="position: absolute; clip: rect(0.823em 1005.1em 1.232em -999.997em); top: -1.285em; left: 0em;"><span style="display: inline-block; overflow: hidden; vertical-align: 0em; border-top: 1.3px solid; width: 5.097em; height: 0px;"></span><span style="display: inline-block; width: 0px; height: 1.057em;"></span></span>
+                                                </span>
+                                                </span>
+                                                </span><span style="display: inline-block; width: 0px; height: 2.169em;"></span></span>
+                                                </span><span style="display: inline-block; overflow: hidden; vertical-align: -0.854em; border-left: 0px solid; width: 0px; height: 2.289em;"></span></span>
+                                                </nobr><span class="MJX_Assistive_MathML" role="presentation"><math xmlns="http://www.w3.org/1998/Math/MathML"><mfrac><mrow class="MJX-TeXAtom-ORD"><mrow><mo>[</mo><mrow class="MJX-TeXAtom-ORD"><mn>4</mn><mo>×</mo><mn>2</mn></mrow><mo>]</mo></mrow><mrow class="MJX-TeXAtom-ORD"><mo>@</mo></mrow><mrow><mo>[</mo><mrow class="MJX-TeXAtom-ORD"><mn>9</mn><mo>×</mo><mrow><mo>(</mo><mrow class="MJX-TeXAtom-ORD"><mo>−</mo><mn>1</mn></mrow><mo>)</mo></mrow></mrow><mo>]</mo></mrow></mrow><mrow class="MJX-TeXAtom-ORD"><mrow><mo>[</mo><mrow class="MJX-TeXAtom-ORD"><mn>2</mn><mrow class="MJX-TeXAtom-ORD"><mo>@</mo></mrow><mn>3</mn></mrow><mo>]</mo></mrow><mo>×</mo><mrow><mo>[</mo><mrow class="MJX-TeXAtom-ORD"><mn>5</mn><mrow class="MJX-TeXAtom-ORD"><mo>@</mo></mrow><mn>2</mn></mrow><mo>]</mo></mrow></mrow></mfrac></math></span></span>
+                                                <script type="math/tex" id="MathJax-Element-1">{\left[ {4 \times 2} \right]@\left[ {9 \times \left( { - 1} \right)} \right]} \over {\left[ {2@3} \right] \times \left[ {5@2} \right]}</script>
+                                                </span>
+                                            </p>
+                                        </div>
+                                    </li>
+                                    <!-- end ngRepeat: question in section.questions track by $index -->
+                                    <li class="list-option ng-scope" ng-repeat="question in section.questions track by $index" ng-click="questionPaperItemClicked($parent.$index +1, $index+1, false)">
+                                        <div class="que-label ql-small" ng-class="{
+                                            &#39;js-que-bookmarked&#39;: isBookmarked($parent.$index +1,  $index+1),
+                                            &#39;js-que-attempted&#39; : isAttempted($parent.$index +1,  $index+1),
+                                            &#39;js-que-skipped&#39; : isSkipped($parent.$index +1,  $index+1),
+                                            &#39;js-que-current&#39;: isCurrentQuestion($parent.$index + 1, $index + 1)
+                                        }">
+                                            <div class="q-badge ng-binding">10<span class="tb-icon tb-bookmark"></span></div>
+                                        </div>
+                                        <div class="list-content ng-binding" ng-bind-html="getQuestionDesc($parent.$index + 1, $index + 1, lang.name)">
+                                            <p>x, y, z are three distinct +ve numbers, such that x &lt; y &lt; z.</p>
+
+                                            <p>f(x, y, z) = min(max(x + y, y + z), max(z + x, x + y))</p>
+
+                                            <p>g(x, y, z) = max(min(x + y, y + z), min(z + x, x + y))</p>
+
+                                            <p>h(x, y, z) = max(max(x + y, y + z), max(z + x, x + y))</p>
+
+                                            <p>j(x, y, z) = min(min(x + y, y + z), min(z + x, x + y))</p>
+
+                                            <p>l(x, y, z) = int((x + y +z)/3) such that&nbsp; l(x, y, z) &lt;= (x + y + z)/3</p>
+
+                                            <p>m(x, y, z) = max(x, y, z)</p>
+
+                                            <p>n(x, y, z) = min(x, y, z)</p>
+
+                                            <p>Which of the following expressions is necessarily equal to 1?</p>
+                                        </div>
+                                    </li>
+                                    <!-- end ngRepeat: question in section.questions track by $index -->
+                                    <li class="list-option ng-scope" ng-repeat="question in section.questions track by $index" ng-click="questionPaperItemClicked($parent.$index +1, $index+1, false)">
+                                        <div class="que-label ql-small" ng-class="{
+                                            &#39;js-que-bookmarked&#39;: isBookmarked($parent.$index +1,  $index+1),
+                                            &#39;js-que-attempted&#39; : isAttempted($parent.$index +1,  $index+1),
+                                            &#39;js-que-skipped&#39; : isSkipped($parent.$index +1,  $index+1),
+                                            &#39;js-que-current&#39;: isCurrentQuestion($parent.$index + 1, $index + 1)
+                                        }">
+                                            <div class="q-badge ng-binding">11<span class="tb-icon tb-bookmark"></span></div>
+                                        </div>
+                                        <div class="list-content ng-binding" ng-bind-html="getQuestionDesc($parent.$index + 1, $index + 1, lang.name)">
+                                            <p>x, y, z are three distinct +ve numbers, such that x &lt; y &lt; z.</p>
+
+                                            <p>f(x, y, z) = min(max(x + y, y + z), max(z + x, x + y))</p>
+
+                                            <p>g(x, y, z) = max(min(x + y, y + z), min(z + x, x + y))</p>
+
+                                            <p>h(x, y, z) = max(max(x + y, y + z), max(z + x, x + y))</p>
+
+                                            <p>j(x, y, z) = min(min(x + y, y + z), min(z + x, x + y))</p>
+
+                                            <p>l(x, y, z) = int((x + y +z)/3) such that&nbsp; l(x, y, z) &lt;= (x + y + z)/3</p>
+
+                                            <p>m(x, y, z) = max(x, y, z)</p>
+
+                                            <p>n(x, y, z) = min(x, y, z)</p>
+
+                                            <p>Which of the following expressions result in a negative value?</p>
+                                        </div>
+                                    </li>
+                                    <!-- end ngRepeat: question in section.questions track by $index -->
+                                    <li class="list-option ng-scope" ng-repeat="question in section.questions track by $index" ng-click="questionPaperItemClicked($parent.$index +1, $index+1, false)">
+                                        <div class="que-label ql-small" ng-class="{
+                                            &#39;js-que-bookmarked&#39;: isBookmarked($parent.$index +1,  $index+1),
+                                            &#39;js-que-attempted&#39; : isAttempted($parent.$index +1,  $index+1),
+                                            &#39;js-que-skipped&#39; : isSkipped($parent.$index +1,  $index+1),
+                                            &#39;js-que-current&#39;: isCurrentQuestion($parent.$index + 1, $index + 1)
+                                        }">
+                                            <div class="q-badge ng-binding">12<span class="tb-icon tb-bookmark"></span></div>
+                                        </div>
+                                        <div class="list-content ng-binding" ng-bind-html="getQuestionDesc($parent.$index + 1, $index + 1, lang.name)">
+                                            <p>Which of the following statements is true if x and y are positive?</p>
+                                        </div>
+                                    </li>
+                                    <!-- end ngRepeat: question in section.questions track by $index -->
+                                    <li class="list-option ng-scope" ng-repeat="question in section.questions track by $index" ng-click="questionPaperItemClicked($parent.$index +1, $index+1, false)">
+                                        <div class="que-label ql-small" ng-class="{
+                                            &#39;js-que-bookmarked&#39;: isBookmarked($parent.$index +1,  $index+1),
+                                            &#39;js-que-attempted&#39; : isAttempted($parent.$index +1,  $index+1),
+                                            &#39;js-que-skipped&#39; : isSkipped($parent.$index +1,  $index+1),
+                                            &#39;js-que-current&#39;: isCurrentQuestion($parent.$index + 1, $index + 1)
+                                        }">
+                                            <div class="q-badge ng-binding">13<span class="tb-icon tb-bookmark"></span></div>
+                                        </div>
+                                        <div class="list-content ng-binding" ng-bind-html="getQuestionDesc($parent.$index + 1, $index + 1, lang.name)">
+                                            <p>What is the value of f[G(f(1.2, 1.3)), f(F(f(0,1)), G(f(0.8, 0.4))]?</p>
+                                        </div>
+                                    </li>
+                                    <!-- end ngRepeat: question in section.questions track by $index -->
+                                    <li class="list-option ng-scope" ng-repeat="question in section.questions track by $index" ng-click="questionPaperItemClicked($parent.$index +1, $index+1, false)">
+                                        <div class="que-label ql-small" ng-class="{
+                                            &#39;js-que-bookmarked&#39;: isBookmarked($parent.$index +1,  $index+1),
+                                            &#39;js-que-attempted&#39; : isAttempted($parent.$index +1,  $index+1),
+                                            &#39;js-que-skipped&#39; : isSkipped($parent.$index +1,  $index+1),
+                                            &#39;js-que-current&#39;: isCurrentQuestion($parent.$index + 1, $index + 1)
+                                        }">
+                                            <div class="q-badge ng-binding">14<span class="tb-icon tb-bookmark"></span></div>
+                                        </div>
+                                        <div class="list-content ng-binding" ng-bind-html="getQuestionDesc($parent.$index + 1, $index + 1, lang.name)">
+                                            <p>Which of the following expressions will yield a number which has an integer square root? (Assume x, y are positive).</p>
+                                        </div>
+                                    </li>
+                                    <!-- end ngRepeat: question in section.questions track by $index -->
+                                    <li class="list-option ng-scope" ng-repeat="question in section.questions track by $index" ng-click="questionPaperItemClicked($parent.$index +1, $index+1, false)">
+                                        <div class="que-label ql-small" ng-class="{
+                                            &#39;js-que-bookmarked&#39;: isBookmarked($parent.$index +1,  $index+1),
+                                            &#39;js-que-attempted&#39; : isAttempted($parent.$index +1,  $index+1),
+                                            &#39;js-que-skipped&#39; : isSkipped($parent.$index +1,  $index+1),
+                                            &#39;js-que-current&#39;: isCurrentQuestion($parent.$index + 1, $index + 1)
+                                        }">
+                                            <div class="q-badge ng-binding">15<span class="tb-icon tb-bookmark"></span></div>
+                                        </div>
+                                        <div class="list-content ng-binding" ng-bind-html="getQuestionDesc($parent.$index + 1, $index + 1, lang.name)">
+                                            <p>If the graph of the function f(x) = (a<sup>x</sup> - 1)/x<sup>n</sup>(a<sup>x</sup>&nbsp;+ 1) is symmetric about y-axis, then n is equal to:</p>
+                                        </div>
+                                    </li>
+                                    <!-- end ngRepeat: question in section.questions track by $index -->
+                                </ul>
+                            </div>
+                            <!-- end ngRepeat: section in test.sections track by $index -->
+                        </div>
+                    </div>
+                    <div class="test-action-controls text-center">
+                        <button type="button" class="btn btn-gray-1 text-uppercase" ng-click="isQuestionPaperVisible = !isQuestionPaperVisible">Back</button>
+                    </div>
+                </div>
+                <div class="content-view test-question-view">
+                    <!--test question view-->
+                    <div class="row">
+                        <!-- ngIf: hasComprehension() -->
+                        <div class="content-height-fixer question-answer-box on-test-page slim-scrollbar">
+                            <div ng-show="isNetworkAlertVisible" class="alert alert-danger network-unavailable font-sm ng-hide">Network disconnected. Retrying...<br> You can continue to attempt the test, please <b>DO NOT REFRESH</b> the page and just make sure you are connected to network before submitting the test.</div>
+                            <div ng-show="isMathJaxAlertVisible()" class="alert alert-danger network-unavailable font-sm ng-binding ng-hide" ng-bind-html="mathJaxErrorMsgHTML"></div>
+                            <div class="question-box">
+                                <div class="row">
+                                    <div class="col-xs-12 qb-header">
+                                        <div class="left-box">
+                                            <div class="que-label ql-small" ng-class="{
+                                            &#39;js-que-bookmarked&#39;: isBookmarked(currentQuestion.sSNo, currentQuestion.qSNo),
+                                            &#39;js-que-attempted&#39; : isAttempted(currentQuestion.sSNo, currentQuestion.qSNo),
+                                            &#39;js-que-skipped&#39; : isSkipped(currentQuestion.sSNo, currentQuestion.qSNo),
+                                            }">
+                                                <div class="q-badge ng-binding">1<span class="tb-icon tb-bookmark"></span></div>
+                                            </div>
+                                            <div class="que-time">
+                                                <count-up-timer secs="0" current-section="1" current-question="1" hide-zero="y" stop="false" class="ng-binding ng-isolate-scope">
+                                                    <no-style ng-show="isVisible(TH)" class="ng-binding ng-hide">00:</no-style>00:09</count-up-timer>
+                                            </div>
+                                            <div class="que-marking-scheme">
+                                                <span class="pos ng-binding">+3</span>
+                                                <span class="neg ng-binding">-1</span>
+                                            </div>
+                                        </div>
+                                        <div class="right-box">
+                                            <div class="row">
+                                                <div class="col-xs-12 que-action-options">
+                                                    <div>
+                                                        <button class="mark-review-btn test-btn-style" type="button" ng-class="{&#39;marked-question&#39;:isBookmarked(currentQuestion.sSNo, currentQuestion.qSNo)}" ng-click="bookmarkBtnPressed()">
+                                                    <!-- conditional class "marked-question" -->
+                                                    <i class="tb-icon tb-bookmark"></i>
+                                                    <span class="mark">Mark For Review</span>
+                                                    <span class="marked">Marked For Review</span>
+                                                </button>
+                                                    </div>
+                                                    <div>
+                                                        <report-cta qid="558daf312a396511d0489d41" chapter-id="" test-id="5616c20fcac3ae7fcad5ab1a" course-id="557af9de0ea5ce31f0529187" lang="en" options="Wrong Question,Formatting Issue,Others" btn-type="" class="report-this-question ng-isolate-scope">
+                                                            <div class="tb-report-component dropdown" ng-class="{&#39;state-reported&#39;: hasReported()}" ng-click="stopEventProp($event)">
+                                                                <!-- conditional class "que-reported que-reporting" -->
+                                                                <button class="btn btn-round btn-sm dropdown-toggle" type="button" data-toggle="dropdown" ng-class="{&#39;report-more-vert&#39; : reportBtnType == &#39;report-more-vert&#39;}">
+        <i class="tb-icon tb-more"></i>
+        <i class="tb-icon tb-report"></i>
+        <span class="report">Report</span>
+        <span class="reported">Reported</span>
+    </button>
+                                                                <ul class="dropdown-menu dropdown-menu-right">
+                                                                    <li class="d-arrow"></li>
+                                                                    <!-- ngRepeat: reportType in reportTypeArr -->
+                                                                    <li ng-repeat="reportType in reportTypeArr" class="ng-scope">
+                                                                        <a href="https://testbook.com/aptitude/tests/5616c20fcac3ae7fcad5ab1a#" class="btn-sm ng-binding" ng-click="setReportType(reportType, question)">Wrong Question </a>
+                                                                    </li>
+                                                                    <!-- end ngRepeat: reportType in reportTypeArr -->
+                                                                    <li ng-repeat="reportType in reportTypeArr" class="ng-scope">
+                                                                        <a href="https://testbook.com/aptitude/tests/5616c20fcac3ae7fcad5ab1a#" class="btn-sm ng-binding" ng-click="setReportType(reportType, question)">Formatting Issue </a>
+                                                                    </li>
+                                                                    <!-- end ngRepeat: reportType in reportTypeArr -->
+                                                                    <li ng-repeat="reportType in reportTypeArr" class="ng-scope">
+                                                                        <a href="https://testbook.com/aptitude/tests/5616c20fcac3ae7fcad5ab1a#" class="btn-sm ng-binding" ng-click="setReportType(reportType, question)">Others </a>
+                                                                    </li>
+                                                                    <!-- end ngRepeat: reportType in reportTypeArr -->
+                                                                </ul>
+                                                            </div>
+                                                        </report-cta>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 qb-body">
+                                        <div class="complete-que-content ng-binding" ng-bind-html="getQuestionDesc(currentQuestion.sSNo, currentQuestion.qSNo, lang.name)">
+                                            <p>Let <em>g</em>(<em>x</em>) be a function such that <em>g</em>(<em>x</em> + 1) + <em>g</em>(<em>x</em> – 1) = <em>g</em>(<em>x</em>) for every real <em>x</em>. Then for what value of <em>p</em> is the relation <em>g</em>(<em>x</em> + <em>p</em>) = <em>g</em>(<em>x</em>) necessarily true for every real <em>x</em>?</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="answer-box">
+                                <ul class="list-choices" ng-show="!isNumerical()">
+                                    <!-- ngRepeat: option in getOptions() -->
+                                    <li class="list-option ng-scope" ng-repeat="option in getOptions()" ng-class="{&#39;js-que-attempted&#39;: selectedOption.value == option.prompt}" ng-click="setOption(option)">
+                                        <div class="que-label ql-small">
+                                            <div class="q-badge ng-binding">1</div>
+                                        </div>
+                                        <div class="list-content ng-binding" ng-bind-html="parseDesc(option.value)">
+                                            <p>5</p>
+                                        </div>
+                                    </li>
+                                    <!-- end ngRepeat: option in getOptions() -->
+                                    <li class="list-option ng-scope" ng-repeat="option in getOptions()" ng-class="{&#39;js-que-attempted&#39;: selectedOption.value == option.prompt}" ng-click="setOption(option)">
+                                        <div class="que-label ql-small">
+                                            <div class="q-badge ng-binding">2</div>
+                                        </div>
+                                        <div class="list-content ng-binding" ng-bind-html="parseDesc(option.value)">
+                                            <p>3</p>
+                                        </div>
+                                    </li>
+                                    <!-- end ngRepeat: option in getOptions() -->
+                                    <li class="list-option ng-scope" ng-repeat="option in getOptions()" ng-class="{&#39;js-que-attempted&#39;: selectedOption.value == option.prompt}" ng-click="setOption(option)">
+                                        <div class="que-label ql-small">
+                                            <div class="q-badge ng-binding">3</div>
+                                        </div>
+                                        <div class="list-content ng-binding" ng-bind-html="parseDesc(option.value)">
+                                            <p>2</p>
+                                        </div>
+                                    </li>
+                                    <!-- end ngRepeat: option in getOptions() -->
+                                    <li class="list-option ng-scope" ng-repeat="option in getOptions()" ng-class="{&#39;js-que-attempted&#39;: selectedOption.value == option.prompt}" ng-click="setOption(option)">
+                                        <div class="que-label ql-small">
+                                            <div class="q-badge ng-binding">4</div>
+                                        </div>
+                                        <div class="list-content ng-binding" ng-bind-html="parseDesc(option.value)">
+                                            <p>6</p>
+                                        </div>
+                                    </li>
+                                    <!-- end ngRepeat: option in getOptions() -->
+                                </ul>
+                                <div class="numeric-answer ng-scope ng-hide" ng-show="isNumerical()" ng-controller="KeypadController">
+                                    <p>Your answer: <span class="ng-binding"></span></p>
+
+                                    <div class="tb-keypad">
+                                        <!-- ngRepeat: i in range --><button type="button" class="btn ng-binding ng-scope" ng-repeat="i in range" ng-click="onKeyPress(i)">
+                                    1
+                                </button>
+                                        <!-- end ngRepeat: i in range --><button type="button" class="btn ng-binding ng-scope" ng-repeat="i in range" ng-click="onKeyPress(i)">
+                                    2
+                                </button>
+                                        <!-- end ngRepeat: i in range --><button type="button" class="btn ng-binding ng-scope" ng-repeat="i in range" ng-click="onKeyPress(i)">
+                                    3
+                                </button>
+                                        <!-- end ngRepeat: i in range --><button type="button" class="btn ng-binding ng-scope" ng-repeat="i in range" ng-click="onKeyPress(i)">
+                                    4
+                                </button>
+                                        <!-- end ngRepeat: i in range --><button type="button" class="btn ng-binding ng-scope" ng-repeat="i in range" ng-click="onKeyPress(i)">
+                                    5
+                                </button>
+                                        <!-- end ngRepeat: i in range --><button type="button" class="btn ng-binding ng-scope" ng-repeat="i in range" ng-click="onKeyPress(i)">
+                                    6
+                                </button>
+                                        <!-- end ngRepeat: i in range --><button type="button" class="btn ng-binding ng-scope" ng-repeat="i in range" ng-click="onKeyPress(i)">
+                                    7
+                                </button>
+                                        <!-- end ngRepeat: i in range --><button type="button" class="btn ng-binding ng-scope" ng-repeat="i in range" ng-click="onKeyPress(i)">
+                                    8
+                                </button>
+                                        <!-- end ngRepeat: i in range --><button type="button" class="btn ng-binding ng-scope" ng-repeat="i in range" ng-click="onKeyPress(i)">
+                                    9
+                                </button>
+                                        <!-- end ngRepeat: i in range --><button type="button" class="btn ng-binding ng-scope" ng-repeat="i in range" ng-click="onKeyPress(i)">
+                                    .
+                                </button>
+                                        <!-- end ngRepeat: i in range --><button type="button" class="btn ng-binding ng-scope" ng-repeat="i in range" ng-click="onKeyPress(i)">
+                                    0
+                                </button>
+                                        <!-- end ngRepeat: i in range --><button type="button" class="btn ng-binding ng-scope" ng-repeat="i in range" ng-click="onKeyPress(i)">
+                                    +/-
+                                </button>
+                                        <!-- end ngRepeat: i in range --><button type="button" class="btn ng-binding ng-scope" ng-repeat="i in range" ng-click="onKeyPress(i)">
+                                    CE
+                                </button>
+                                        <!-- end ngRepeat: i in range --><button type="button" class="btn ng-binding ng-scope" ng-repeat="i in range" ng-click="onKeyPress(i)">
+                                    DEL
+                                </button>
+                                        <!-- end ngRepeat: i in range -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="test-action-controls">
+                        <button type="button" class="btn btn-gray-1 text-uppercase mark-next" ng-click="bookmarkAndNextBtnPressed()">
+                    Mark <span class="hidden-xs">for Review</span> &amp; Next
+                </button>
+                        <button type="button" class="btn btn-link text-uppercase clear-selection" ng-click="clearResponse()"><span class="tb-icon tb-clear"></span> Clear Selection
+                </button>
+                        <button type="button" class="btn btn-test-primary text-uppercase pull-right save-next" ng-click="saveAndNextBtnPressed(false)">Save &amp; Next</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="test-content-backdrop" ng-click="toggleSideBar(false)"></div>
+
+            <div class="open-test-sidebar" ng-click="toggleSideBar(true)">
+                <span class="tb-icon tb-menu"></span>
+            </div>
+
+            <div class="test-sidebar">
+                <button type="button" class="btn close-sidebar" ng-click="toggleSideBar(false)"><i class="tb-icon tb-clear"></i></button>
+                <ul class="list-unstyled nav-sections list-view-deactive" ng-class="{&#39;list-view-active&#39;: isListViewEnabled, &#39;list-view-deactive&#39;: !isListViewEnabled}">
+                    <li>
+                        <button type="button" class="btn" ng-click="toggleListView(true)"><i class="tb-icon tb-bullet-list"></i> List View</button>
+                    </li>
+                    <li>
+                        <button type="button" class="btn" ng-click="toggleListView(false)"><i class="tb-icon tb-grid"></i> Grid View</button>
+                    </li>
+                   
+                    
+                </ul>
+                <div class="section-question-list slim-scrollbar" ng-class="{&#39;list-view&#39;: isListViewEnabled}">
+                    <ul class="accordion">
+                        <!-- ngRepeat: section in test.sections track by $index -->
+                        <li class="course-accordion each-section ng-scope" ng-repeat="section in test.sections track by $index" ng-class="{&#39;disabled&#39;: !isActiveSection($index)}">
+                            <div class="accordion-head header active">
+                                <div class="section-details">
+                                    <span class="tb-icon tb-arrow-right-b triangle-icon"></span>
+                                    <div class="name ng-binding">
+                                        Course name
+                                    </div>
+                                    <span class="time-spent js-limited-time ng-hide" ng-show="!test.sectionTimeSharedFlag">
+                                <count-down-timer test-duration="0" is-test-submitted="false" is-timer-paused="false" hide-zero="y" class="ng-binding ng-isolate-scope"><no-style ng-show="isVisible(TH)" class="ng-binding ng-hide">00:</no-style>00:00</count-down-timer>
+                            </span>
+                                    <!--conditional class "js-limited-time" with reverse timer-->
+
+                                    <div class="comp-status">
+                                        <span ng-style="{&#39;width&#39;:getAnsweredCount($index + 1)*100/getQuestionsCount($index + 1) + &#39;%&#39;}" style="width: 0%;"></span>
+                                    </div>
+                                </div>
+                                <ul class="question-states-menu inline-menu mar-t8">
+                                    <li class="skipped"><span class="icon"></span><span class="count ng-binding">0</span></li>
+                                    <li class="unseen"><span class="icon"></span><span class="count ng-binding">15</span></li>
+                                    <li class="answered"><span class="icon"></span><span class="count ng-binding">0</span></li>
+                                    <li class="marked"><span class="icon tb-icon tb-bookmark"></span><span class="count ng-binding">0</span></li>
+                                </ul>
+                            </div>
+                            <div class="accordion-content body" style="display: block;">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <ul class="question-list">
+                                            <!-- ngRepeat: question in section.questions track by $index -->
+                                            <li class="que-label ql-large ng-scope js-que-current" ng-repeat="question in section.questions track by $index" ng-class="{
+                                            &#39;js-que-bookmarked&#39;: isBookmarked($parent.$index +1,  $index+1),
+                                            &#39;js-que-attempted&#39; : isAttempted($parent.$index +1,  $index+1),
+                                            &#39;js-que-skipped&#39; : isSkipped($parent.$index +1,  $index+1),
+                                            &#39;js-que-current&#39;: isCurrentQuestion($parent.$index + 1, $index + 1)
+                                            }" ng-click="sideBarItemClicked($parent.$index +1, $index+1)">
+                                                <div class="q-badge ng-binding">1<span class="tb-icon tb-bookmark"></span>
+                                                </div>
+                                                <div class="que-title ng-binding" ng-bind-html="getQuestionDesc($parent.$index + 1, $index + 1, lang.name, 170)">
+                                                    <p>Let <em>g</em>(<em>x</em>) be a function such that <em>g</em>(<em>x</em> + 1) + <em>g</em>(<em></em></p>
+                                                </div>
+                                            </li>
+                                            <!-- end ngRepeat: question in section.questions track by $index -->
+                                            <li class="que-label ql-large ng-scope" ng-repeat="question in section.questions track by $index" ng-class="{
+                                            &#39;js-que-bookmarked&#39;: isBookmarked($parent.$index +1,  $index+1),
+                                            &#39;js-que-attempted&#39; : isAttempted($parent.$index +1,  $index+1),
+                                            &#39;js-que-skipped&#39; : isSkipped($parent.$index +1,  $index+1),
+                                            &#39;js-que-current&#39;: isCurrentQuestion($parent.$index + 1, $index + 1)
+                                            }" ng-click="sideBarItemClicked($parent.$index +1, $index+1)">
+                                                <div class="q-badge ng-binding">2<span class="tb-icon tb-bookmark"></span>
+                                                </div>
+                                                <div class="que-title ng-binding" ng-bind-html="getQuestionDesc($parent.$index + 1, $index + 1, lang.name, 170)">
+                                                    <p>Answer the questions&nbsp;according to the information given below.</p>
+
+                                                    <p><span style="font-size:13px">If f(x) = </span></p>
+                                                </div>
+                                            </li>
+                                            <!-- end ngRepeat: question in section.questions track by $index -->
+                                            <li class="que-label ql-large ng-scope" ng-repeat="question in section.questions track by $index" ng-class="{
+                                            &#39;js-que-bookmarked&#39;: isBookmarked($parent.$index +1,  $index+1),
+                                            &#39;js-que-attempted&#39; : isAttempted($parent.$index +1,  $index+1),
+                                            &#39;js-que-skipped&#39; : isSkipped($parent.$index +1,  $index+1),
+                                            &#39;js-que-current&#39;: isCurrentQuestion($parent.$index + 1, $index + 1)
+                                            }" ng-click="sideBarItemClicked($parent.$index +1, $index+1)">
+                                                <div class="q-badge ng-binding">3<span class="tb-icon tb-bookmark"></span>
+                                                </div>
+                                                <div class="que-title ng-binding" ng-bind-html="getQuestionDesc($parent.$index + 1, $index + 1, lang.name, 170)">
+                                                    <p>A quadratic function <em>f</em>(<em>x</em>) attains a maximum of 3 at <em>x</em> = 1. The value of the function at <em></em></p>
+                                                </div>
+                                            </li>
+                                            <!-- end ngRepeat: question in section.questions track by $index -->
+                                            <li class="que-label ql-large ng-scope" ng-repeat="question in section.questions track by $index" ng-class="{
+                                            &#39;js-que-bookmarked&#39;: isBookmarked($parent.$index +1,  $index+1),
+                                            &#39;js-que-attempted&#39; : isAttempted($parent.$index +1,  $index+1),
+                                            &#39;js-que-skipped&#39; : isSkipped($parent.$index +1,  $index+1),
+                                            &#39;js-que-current&#39;: isCurrentQuestion($parent.$index + 1, $index + 1)
+                                            }" ng-click="sideBarItemClicked($parent.$index +1, $index+1)">
+                                                <div class="q-badge ng-binding">4<span class="tb-icon tb-bookmark"></span>
+                                                </div>
+                                                <div class="que-title ng-binding" ng-bind-html="getQuestionDesc($parent.$index + 1, $index + 1, lang.name, 170)">
+                                                    <p>A function <em>f</em>(<em>x</em>) satisfies <em>f</em> (1) = 3600, and <em>f</em>(l) + <em>f</em>(2) </p>
+                                                </div>
+                                            </li>
+                                            <!-- end ngRepeat: question in section.questions track by $index -->
+                                            <li class="que-label ql-large ng-scope" ng-repeat="question in section.questions track by $index" ng-class="{
+                                            &#39;js-que-bookmarked&#39;: isBookmarked($parent.$index +1,  $index+1),
+                                            &#39;js-que-attempted&#39; : isAttempted($parent.$index +1,  $index+1),
+                                            &#39;js-que-skipped&#39; : isSkipped($parent.$index +1,  $index+1),
+                                            &#39;js-que-current&#39;: isCurrentQuestion($parent.$index + 1, $index + 1)
+                                            }" ng-click="sideBarItemClicked($parent.$index +1, $index+1)">
+                                                <div class="q-badge ng-binding">5<span class="tb-icon tb-bookmark"></span>
+                                                </div>
+                                                <div class="que-title ng-binding" ng-bind-html="getQuestionDesc($parent.$index + 1, $index + 1, lang.name, 170)">
+                                                    <p><span style="background-color:rgb(249, 249, 249); font-family:helvetica neue,helvetica,arial,sans-serif">Answer the following question according </span></p>
+                                                </div>
+                                            </li>
+                                            <!-- end ngRepeat: question in section.questions track by $index -->
+                                            <li class="que-label ql-large ng-scope" ng-repeat="question in section.questions track by $index" ng-class="{
+                                            &#39;js-que-bookmarked&#39;: isBookmarked($parent.$index +1,  $index+1),
+                                            &#39;js-que-attempted&#39; : isAttempted($parent.$index +1,  $index+1),
+                                            &#39;js-que-skipped&#39; : isSkipped($parent.$index +1,  $index+1),
+                                            &#39;js-que-current&#39;: isCurrentQuestion($parent.$index + 1, $index + 1)
+                                            }" ng-click="sideBarItemClicked($parent.$index +1, $index+1)">
+                                                <div class="q-badge ng-binding">6<span class="tb-icon tb-bookmark"></span>
+                                                </div>
+                                                <div class="que-title ng-binding" ng-bind-html="getQuestionDesc($parent.$index + 1, $index + 1, lang.name, 170)">
+                                                    <p>Let f(x) be a function whose domain is [-5, 7]. Let g(x) = |2x + 5|, then domain of (fog) (x) is</p>
+                                                </div>
+                                            </li>
+                                            <!-- end ngRepeat: question in section.questions track by $index -->
+                                            <li class="que-label ql-large ng-scope" ng-repeat="question in section.questions track by $index" ng-class="{
+                                            &#39;js-que-bookmarked&#39;: isBookmarked($parent.$index +1,  $index+1),
+                                            &#39;js-que-attempted&#39; : isAttempted($parent.$index +1,  $index+1),
+                                            &#39;js-que-skipped&#39; : isSkipped($parent.$index +1,  $index+1),
+                                            &#39;js-que-current&#39;: isCurrentQuestion($parent.$index + 1, $index + 1)
+                                            }" ng-click="sideBarItemClicked($parent.$index +1, $index+1)">
+                                                <div class="q-badge ng-binding">7<span class="tb-icon tb-bookmark"></span>
+                                                </div>
+                                                <div class="que-title ng-binding" ng-bind-html="getQuestionDesc($parent.$index + 1, $index + 1, lang.name, 170)">
+                                                    <p>The range of the function f(x) = log<sub><span style="color:rgb(68, 68, 68); font-family:arial,sans-serif; font-size:small">√&lt;</span></sub></p>
+                                                </div>
+                                            </li>
+                                            <!-- end ngRepeat: question in section.questions track by $index -->
+                                            <li class="que-label ql-large ng-scope" ng-repeat="question in section.questions track by $index" ng-class="{
+                                            &#39;js-que-bookmarked&#39;: isBookmarked($parent.$index +1,  $index+1),
+                                            &#39;js-que-attempted&#39; : isAttempted($parent.$index +1,  $index+1),
+                                            &#39;js-que-skipped&#39; : isSkipped($parent.$index +1,  $index+1),
+                                            &#39;js-que-current&#39;: isCurrentQuestion($parent.$index + 1, $index + 1)
+                                            }" ng-click="sideBarItemClicked($parent.$index +1, $index+1)">
+                                                <div class="q-badge ng-binding">8<span class="tb-icon tb-bookmark"></span>
+                                                </div>
+                                                <div class="que-title ng-binding" ng-bind-html="getQuestionDesc($parent.$index + 1, $index + 1, lang.name, 170)">
+                                                    <p>If f(x) - x<sup>2</sup> - px + q. If f(1) and f(2) are of opposite signs, which of the following cannot be the value of f(0)?</p>
+                                                </div>
+                                            </li>
+                                            <!-- end ngRepeat: question in section.questions track by $index -->
+                                            <li class="que-label ql-large ng-scope" ng-repeat="question in section.questions track by $index" ng-class="{
+                                            &#39;js-que-bookmarked&#39;: isBookmarked($parent.$index +1,  $index+1),
+                                            &#39;js-que-attempted&#39; : isAttempted($parent.$index +1,  $index+1),
+                                            &#39;js-que-skipped&#39; : isSkipped($parent.$index +1,  $index+1),
+                                            &#39;js-que-current&#39;: isCurrentQuestion($parent.$index + 1, $index + 1)
+                                            }" ng-click="sideBarItemClicked($parent.$index +1, $index+1)">
+                                                <div class="q-badge ng-binding">9<span class="tb-icon tb-bookmark"></span>
+                                                </div>
+                                                <div class="que-title ng-binding" ng-bind-html="getQuestionDesc($parent.$index + 1, $index + 1, lang.name, 170)">
+                                                    <p><strong>Choose the correct alternative.</strong></p>
+
+                                                    <p>a @ b = ab – 1; if a &gt; b</p>
+
+                                                    <p>&nbsp;&amp;</p>
+                                                </div>
+                                            </li>
+                                            <!-- end ngRepeat: question in section.questions track by $index -->
+                                            <li class="que-label ql-large ng-scope" ng-repeat="question in section.questions track by $index" ng-class="{
+                                            &#39;js-que-bookmarked&#39;: isBookmarked($parent.$index +1,  $index+1),
+                                            &#39;js-que-attempted&#39; : isAttempted($parent.$index +1,  $index+1),
+                                            &#39;js-que-skipped&#39; : isSkipped($parent.$index +1,  $index+1),
+                                            &#39;js-que-current&#39;: isCurrentQuestion($parent.$index + 1, $index + 1)
+                                            }" ng-click="sideBarItemClicked($parent.$index +1, $index+1)">
+                                                <div class="q-badge ng-binding">10<span class="tb-icon tb-bookmark"></span>
+                                                </div>
+                                                <div class="que-title ng-binding" ng-bind-html="getQuestionDesc($parent.$index + 1, $index + 1, lang.name, 170)">
+                                                    <p>x, y, z are three distinct +ve numbers, such that x &lt; y &lt; z.</p>
+
+                                                    <p>f(x, y, z) = min(max(x + y, y + z), max(z + x, x + y))</p>
+                                                </div>
+                                            </li>
+                                            <!-- end ngRepeat: question in section.questions track by $index -->
+                                            <li class="que-label ql-large ng-scope" ng-repeat="question in section.questions track by $index" ng-class="{
+                                            &#39;js-que-bookmarked&#39;: isBookmarked($parent.$index +1,  $index+1),
+                                            &#39;js-que-attempted&#39; : isAttempted($parent.$index +1,  $index+1),
+                                            &#39;js-que-skipped&#39; : isSkipped($parent.$index +1,  $index+1),
+                                            &#39;js-que-current&#39;: isCurrentQuestion($parent.$index + 1, $index + 1)
+                                            }" ng-click="sideBarItemClicked($parent.$index +1, $index+1)">
+                                                <div class="q-badge ng-binding">11<span class="tb-icon tb-bookmark"></span>
+                                                </div>
+                                                <div class="que-title ng-binding" ng-bind-html="getQuestionDesc($parent.$index + 1, $index + 1, lang.name, 170)">
+                                                    <p>x, y, z are three distinct +ve numbers, such that x &lt; y &lt; z.</p>
+
+                                                    <p>f(x, y, z) = min(max(x + y, y + z), max(z + x, x + y))</p>
+                                                </div>
+                                            </li>
+                                            <!-- end ngRepeat: question in section.questions track by $index -->
+                                            <li class="que-label ql-large ng-scope" ng-repeat="question in section.questions track by $index" ng-class="{
+                                            &#39;js-que-bookmarked&#39;: isBookmarked($parent.$index +1,  $index+1),
+                                            &#39;js-que-attempted&#39; : isAttempted($parent.$index +1,  $index+1),
+                                            &#39;js-que-skipped&#39; : isSkipped($parent.$index +1,  $index+1),
+                                            &#39;js-que-current&#39;: isCurrentQuestion($parent.$index + 1, $index + 1)
+                                            }" ng-click="sideBarItemClicked($parent.$index +1, $index+1)">
+                                                <div class="q-badge ng-binding">12<span class="tb-icon tb-bookmark"></span>
+                                                </div>
+                                                <div class="que-title ng-binding" ng-bind-html="getQuestionDesc($parent.$index + 1, $index + 1, lang.name, 170)">
+                                                    <p>Which of the following statements is true if x and y are positive?</p>
+                                                </div>
+                                            </li>
+                                            <!-- end ngRepeat: question in section.questions track by $index -->
+                                            <li class="que-label ql-large ng-scope" ng-repeat="question in section.questions track by $index" ng-class="{
+                                            &#39;js-que-bookmarked&#39;: isBookmarked($parent.$index +1,  $index+1),
+                                            &#39;js-que-attempted&#39; : isAttempted($parent.$index +1,  $index+1),
+                                            &#39;js-que-skipped&#39; : isSkipped($parent.$index +1,  $index+1),
+                                            &#39;js-que-current&#39;: isCurrentQuestion($parent.$index + 1, $index + 1)
+                                            }" ng-click="sideBarItemClicked($parent.$index +1, $index+1)">
+                                                <div class="q-badge ng-binding">13<span class="tb-icon tb-bookmark"></span>
+                                                </div>
+                                                <div class="que-title ng-binding" ng-bind-html="getQuestionDesc($parent.$index + 1, $index + 1, lang.name, 170)">
+                                                    <p>What is the value of f[G(f(1.2, 1.3)), f(F(f(0,1)), G(f(0.8, 0.4))]?</p>
+                                                </div>
+                                            </li>
+                                            <!-- end ngRepeat: question in section.questions track by $index -->
+                                            <li class="que-label ql-large ng-scope" ng-repeat="question in section.questions track by $index" ng-class="{
+                                            &#39;js-que-bookmarked&#39;: isBookmarked($parent.$index +1,  $index+1),
+                                            &#39;js-que-attempted&#39; : isAttempted($parent.$index +1,  $index+1),
+                                            &#39;js-que-skipped&#39; : isSkipped($parent.$index +1,  $index+1),
+                                            &#39;js-que-current&#39;: isCurrentQuestion($parent.$index + 1, $index + 1)
+                                            }" ng-click="sideBarItemClicked($parent.$index +1, $index+1)">
+                                                <div class="q-badge ng-binding">14<span class="tb-icon tb-bookmark"></span>
+                                                </div>
+                                                <div class="que-title ng-binding" ng-bind-html="getQuestionDesc($parent.$index + 1, $index + 1, lang.name, 170)">
+                                                    <p>Which of the following expressions will yield a number which has an integer square root? (Assume x, y are positive).</p>
+                                                </div>
+                                            </li>
+                                            <!-- end ngRepeat: question in section.questions track by $index -->
+                                            <li class="que-label ql-large ng-scope" ng-repeat="question in section.questions track by $index" ng-class="{
+                                            &#39;js-que-bookmarked&#39;: isBookmarked($parent.$index +1,  $index+1),
+                                            &#39;js-que-attempted&#39; : isAttempted($parent.$index +1,  $index+1),
+                                            &#39;js-que-skipped&#39; : isSkipped($parent.$index +1,  $index+1),
+                                            &#39;js-que-current&#39;: isCurrentQuestion($parent.$index + 1, $index + 1)
+                                            }" ng-click="sideBarItemClicked($parent.$index +1, $index+1)">
+                                                <div class="q-badge ng-binding">15<span class="tb-icon tb-bookmark"></span>
+                                                </div>
+                                                <div class="que-title ng-binding" ng-bind-html="getQuestionDesc($parent.$index + 1, $index + 1, lang.name, 170)">
+                                                    <p>If the graph of the function f(x) = (a<sup>x</sup> - 1)/x<sup>n</sup>(a<sup>x</sup>&nbsp;+ 1) is symmetric about y-axis, </p>
+                                                </div>
+                                            </li>
+                                            <!-- end ngRepeat: question in section.questions track by $index -->
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <!-- end ngRepeat: section in test.sections track by $index -->
+                    </ul>
+                </div>
+                <div class="quesList-inst">
+                    <a data-href="#" class="dropup">
+                Help
+                <ul class="dropdown-menu question-states-menu">
+                    <li class="skipped"><span class="icon"></span>Skipped</li>
+                    <li class="unseen"><span class="icon"></span>Unseen</li>
+                    <li class="answered"><span class="icon"></span>Attempted</li>
+                    <li class="marked"><span class="icon tb-icon tb-bookmark"></span>Marked for Review</li>
+                </ul>
+            </a> |
+                    <a data-href="#" ng-click="isQuestionPaperVisible = !isQuestionPaperVisible; toggleSideBar(false)">Question Paper</a> |
+                    <a data-href="#" ng-click="getDynamicInstructions()">Instructions</a>
+                </div>
+            </div>
+
+        </div>
+        <div id="summaryModal" class="modal ng-scope" tabindex="-1" role="dialog" aria-labelledby="summaryModalLabel" aria-hidden="true">
+            <div class="modal-dialog test-summary-modal">
+                <div class="modal-content submit-test">
+                    <div class="modal-body clearfix">
+                        <div class="row">
+                            <div class="col-xs-12 intro-text">
+                                <h2 class="title">My Test Summary</h2>
+                                <span>Answers are saved Successfully</span>
+                            </div>
+                            <div class="col-xs-12 summary-container">
+                                <div class="summary-table">
+                                    <div class="row">
+                                        <div class="col-xs-12 summary-each-section head">
+                                            <div class="content col-xs-2">Section</div>
+                                            <div class="content col-xs-2">Attempted</div>
+                                            <div class="content col-xs-2">Skipped</div>
+                                            <div class="content col-xs-2">Bookmarked</div>
+                                            <div class="content col-xs-2">Unseen</div>
+                                            <div class="content col-xs-2">Total</div>
+                                        </div>
+                                        <!-- ngRepeat: section in test.sections track by $index -->
+                                        <div class="col-xs-12 summary-each-section body ng-scope ng-hide" ng-repeat="section in test.sections track by $index" ng-show="test.sections.length&gt;1">
+                                            <div class="content col-xs-2 ng-binding"></div>
+                                            <div class="content col-xs-2 ng-binding">0</div>
+                                            <div class="content col-xs-2 ng-binding">0</div>
+                                            <div class="content col-xs-2 ng-binding">0</div>
+                                            <div class="content col-xs-2 ng-binding">15</div>
+                                            <div class="content col-xs-2 ng-binding">15</div>
+                                        </div>
+                                        <!-- end ngRepeat: section in test.sections track by $index -->
+                                        <div class="col-xs-12 summary-each-section footer">
+                                            <div class="content col-xs-2">Total</div>
+                                            <div class="content col-xs-2 ng-binding">0</div>
+                                            <div class="content col-xs-2 ng-binding">0</div>
+                                            <div class="content col-xs-2 ng-binding">0</div>
+                                            <div class="content col-xs-2 ng-binding">15</div>
+                                            <div class="content col-xs-2 ng-binding">15</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer pad-0">
+                        <button class="btn btn-block btn-lg btn-test-primary text-uppercase ng-hide" data-dismiss="modal" type="button" ng-show="isTestPaused &amp;&amp; !isTestSubmitted" ng-click="resumeBtnPressed()">Resume Test</button>
+                        <a class="btn btn-block btn-lg btn-test-primary text-uppercase mar-t0 ng-hide" href="https://testbook.com/aptitude/tests/5616c20fcac3ae7fcad5ab1a#/solutions" ng-show="isTestSubmitted">Continue</a>
+                    </div>
+                </div>
+                <div class="modal-content-bottom mar-v32 ng-hide" ng-show="isTestPaused &amp;&amp; !isTestSubmitted">
+                    <div class="modal-footer">
+                        <div class="text-center">
+                            <a href="https://testbook.com/aptitude/mocktest?tab=my" class="btn btn-sm btn-link-white">Go back to My Tests</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ngInclude: '/views/partials/test/modal.html' -->
+        <div ng-include="&#39;/views/partials/test/modal.html&#39;" class="ng-scope">
+            <div class="modal fade ng-scope" id="tbAlertModal" tabindex="-1" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal"><span>×</span></button>
+                            <h4 class="modal-title ng-binding"></h4>
+                        </div>
+                        <div class="modal-body">
+                            <p class="ng-binding"></p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default ng-binding" data-dismiss="modal" ng-click="modalObj.reject.cb()"></button>
+                            <button type="button" class="btn btn-theme border-square ng-binding" ng-click="modalObj.accept.cb()"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- ngInclude: '/views/partials/test/instructions.html' -->
+        <div ng-include="&#39;/views/partials/test/instructions.html&#39;" class="ng-scope">
+            <div class="modal ng-scope" id="readInstructions" tabindex="-1" role="dialog" aria-labelledby="readInstructionsLabel" aria-hidden="true">
+                <div class="modal-dialog modal-md">
+                    <div class="modal-content read-instructions-modal">
+                        <div class="modal-header text-center">
+                            <h4 class="modal-title ng-binding">Instructions for ()</h4>
+                        </div>
+                        <div class="modal-body" style="max-height: calc(100vh - 224px);overflow-y: auto">
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="info-text">
+                                        <span class="ng-binding">Duration:  Mins</span>
+                                        <span class="pull-right ng-binding">Marks: </span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12">
+                                    <div class="instructions">
+                                        <h6>Read the following instructions carefully:</h6>
+                                        <ol start="1">
+                                            <!-- ngRepeat: ins in instructionsJSON.instructionsArr -->
+                                        </ol>
+                                    </div>
+                                    <div class="row more-about-interface" ng-click="showInstTab = !showInstTab" ng-class="{&#39;open&#39;: !showInstTab}">
+                                        Know more about the interface
+                                        <div class="pull-right">
+                                            <span class="plus">+</span>
+                                            <span class="minus">-</span>
+                                        </div>
+                                    </div>
+                                    <!-- ngIf: instructionsJSON.isGateExam -->
+                                    <!-- ngIf: !instructionsJSON.isGateExam -->
+                                    <div class="other-instructions ng-scope ng-hide" ng-show="showInstTab == 0" id="bank-instructions" ng-if="!instructionsJSON.isGateExam">
+                                        <div class="row">
+                                            <div class="col-xs-12">
+                                                <h5> General Instructions: </h5>
+                                                <ol start="1">
+                                                    <li>
+                                                        <p> The clock will be set at the server. The countdown timer at the top right corner of screen will display the remaining time available for you to complete the examination. When the timer reaches zero, the examination will end by itself. You need not terminate the examination or submit your paper. </p>
+                                                    </li>
+                                                    <li>
+                                                        <p> The Question Palette displayed on the right side of screen will show the status of each question using one of the following symbols: </p>
+                                                        <ul class="que-legends">
+                                                            <li>
+                                                                <div class="que-label ql-large js-que-skipped">
+                                                                    <div class="q-badge"></div>
+                                                                </div> You have not answered the question</li>
+                                                            <li>
+                                                                <div class="que-label ql-large js-que-unseen">
+                                                                    <div class="q-badge"></div>
+                                                                </div> You have not visited the question yet</li>
+                                                            <li>
+                                                                <div class="que-label ql-large js-que-attempted">
+                                                                    <div class="q-badge"></div>
+                                                                </div> You have answered the question</li>
+                                                            <li>
+                                                                <div class="que-label ql-large js-que-skipped js-que-bookmarked">
+                                                                    <div class="q-badge"><span class="tb-icon tb-bookmark"></span></div>
+                                                                </div> You have NOT answered the question, but have marked the question for review</li>
+                                                            <li>
+                                                                <div class="que-label ql-large js-que-attempted js-que-bookmarked">
+                                                                    <div class="q-badge"><span class="tb-icon tb-bookmark"></span></div>
+                                                                </div> You have answered the question, but marked it for review</li>
+                                                        </ul>
+                                                    </li>
+                                                </ol>
+                                                <p> The <b>Mark For Review </b> status for a question simply indicates that you would like to look at that question again. If a question is answered, but marked for review, then the answer will be considered for evaluation unless the status is modified by the candidate. </p>
+
+                                                <b> Navigating to a Question : </b>
+                                                <ol start="3">
+                                                    <li>
+                                                        <p> To answer a question, do the following: </p>
+                                                        <ol>
+                                                            <li> Click on the question number in the Question Palette at the right of your screen to go to that numbered question directly. Note that using this option does NOT save your answer to the current question. </li>
+                                                            <li> Click on <b> Save &amp; Next </b> to save your answer for the current question and then go to the next question. </li>
+                                                            <li> Click on <b> Mark for Review &amp; Next </b> to save your answer for the current question and also mark it for review, and then go to the next question. </li>
+                                                        </ol>
+                                                    </li>
+                                                </ol>
+                                                <p> Note that your answer for the current question will not be saved, if you navigate to another question directly by clicking on a question number <span> without saving </span> the answer to the previous question.</p>
+                                                <p> You can view all the questions by clicking on the <b> Question Paper </b> button. <span style="color:#ff0000">This feature is provided, so that if you want you can just see the entire question paper at a glance. </span> </p>
+                                                <h5> Answering a Question : </h5>
+                                                <ol start="4">
+                                                    <li>
+                                                        <p> Procedure for answering a multiple choice (MCQ) type question: </p>
+                                                        <ol>
+                                                            <li> Choose one answer from the options given below the questions. You may click on the entire option box to select your answer </li>
+                                                            <li> To deselect your chosen answer, click on the bubble of the chosen option again or click on the <b> Clear Response </b> button </li>
+                                                            <li> To change your chosen answer, click on the bubble of another option. </li>
+                                                            <li> To save your answer, you MUST click on the <b> Save &amp; Next </b> </li>
+                                                        </ol>
+                                                    </li>
+
+                                                    <li>
+                                                        <p> Procedure for answering a numerical answer type question : </p>
+                                                        <ol>
+                                                            <li> To enter a number as your answer, use the virtual numerical keypad. </li>
+                                                            <li> A fraction (e.g. -0.3 or -.3) can be entered as an answer with or without "0" before the decimal point. <span style="color: red">As many as four decimal points, e.g. 12.5435 or 0.003 or -932.6711 or 12.82 can be entered. </span> </li>
+                                                            <li> To clear your answer, click on the <b> Clear Response </b> button </li>
+                                                            <li> To save your answer, you MUST click on the <b> Save &amp; Next </b> </li>
+                                                        </ol>
+                                                    </li>
+
+                                                    <li>
+                                                        <p> To mark a question for review, click on the <b> Mark for Review &amp; Next </b> button. If an answer is selected (for MCQ) entered (for numerival answer type) for a question that is <b> Marked for Review </b> , that answer will be considered in the evaluation unless the status is modified by the candidate.
+                                                        </p>
+                                                    </li>
+
+                                                    <li>
+                                                        <p> To change your answer to a question that has already been answered, first select that question for answering and then follow the procedure for answering that type of question. </p>
+                                                    </li>
+
+                                                    <li>
+                                                        <p> Note that ONLY Questions for which answers are <b> saved </b> or <b> marked for review after answering </b> will be considered for evaluation. </p>
+                                                    </li>
+
+                                                    <li>
+                                                        <p> Sections in this question paper are displayed on the top bar of the screen. Questions in a Section can be viewed by clicking on the name of that Section. The Section you are currently viewing will be highlighted. </p>
+                                                    </li>
+
+                                                    <li>
+                                                        <p> After clicking the <b> Save &amp; Next </b> button for the last question in a Section, you will automatically be taken to the first question of the next Section in sequence. </p>
+                                                    </li>
+
+                                                    <li>
+                                                        <p> You can move the mouse cursor over the name of a Section to view the answering status for that Section. </p>
+                                                    </li>
+                                                </ol>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- end ngIf: !instructionsJSON.isGateExam -->
+                                </div>
+                            </div>
+                        </div>
+                        <!-- ngIf: isSmartLab && smartLabTestStartStep != 2 -->
+                        <!-- ngIf: !isSmartLab || smartLabTestStartStep == 2 -->
+                        <div class="modal-footer ng-scope" ng-if="!isSmartLab || smartLabTestStartStep == 2">
+                            <!-- ngIf: !isTestInProgress -->
+                            <!-- ngIf: isTestInProgress --><button type="button" data-dismiss="modal" class="btn btn-test-primary btn-lg btn-block text-uppercase ng-scope" ng-if="isTestInProgress">Back to test</button>
+                            <!-- end ngIf: isTestInProgress -->
+                        </div>
+                        <!-- end ngIf: !isSmartLab || smartLabTestStartStep == 2 -->
+                    </div>
+                    <!-- ngIf: !isTestInProgress -->
+                </div>
+            </div>
+        </div>
+        <!--<div id="drag-calculator" class="test-calculator ng-scope ng-hide" ng-show="isShowCalculator" style="position: absolute;z-index:1000;">
+            <div class="test-calculator-header">
+                <button type="button" id="drag-calculator-btn" class="btn btn-test-primary border-square">DRAG HERE</button>
+                <button type="button" class="btn btn-test-primary border-square pull-right" ng-click="closeCalculator()">CLOSE</button>
+            </div>
+            <!-- ngIf: isShowCalculator -->
+        </div>-->
+    </div>
+    
+    <!--
+    <script src="./jquery.min.js.download" type="text/javascript"></script>
+    <script src="./angular.min.js.download" type="text/javascript"></script>
+    <script src="./angular-route.min.js.download" type="text/javascript"></script>
+    
+    -->
+
+
+
+</body>
+</html>
