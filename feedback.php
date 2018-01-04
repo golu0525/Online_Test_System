@@ -9,11 +9,11 @@ if (isset($_POST['btnsubmit'])) {
   $optradio3=$test -> real_escape_string(implode(",",$_POST['radio2']));
   $optradio4=$test -> real_escape_string(implode(",",$_POST['radio3']));
   $txtcomment=$test -> real_escape_string($_POST['txtcomment']);
- 
+
 
   $q="INSERT INTO feedback VALUES(NULL, NULL, NULL, NULL, '$optradio1', '$optradio2', '$optradio3', '$optradio4', '$txtcomment', '$txtemail')";
   $SQL=$test ->query($q);
-	
+
   if ($test -> query($q)) {
     $msg = "Thank You!!!";
     header('Location:index.php');
@@ -76,86 +76,86 @@ if (isset($_POST['btnsubmit'])) {
 		<!--[if lt IE 9]>
       <script src="assets/js/html5shiv.js"></script>
   <![endif]-->
-	
+
 		<style>
 			/* start editing from here */
-			
+
 			a {
 				text-decoration: none;
 			}
-			
+
 			.txt-rt {
 				text-align: right;
 			}
 			/* text align right */
-			
+
 			.txt-lt {
 				text-align: left;
 			}
 			/* text align left */
-			
+
 			.txt-center {
 				text-align: center;
 			}
 			/* text align center */
-			
+
 			.float-rt {
 				float: right;
 			}
 			/* float right */
-			
+
 			.float-lt {
 				float: left;
 			}
 			/* float left */
-			
+
 			.clear {
 				clear: both;
 			}
 			/* clear float */
-			
+
 			.pos-relative {
 				position: relative;
 			}
 			/* Position Relative */
-			
+
 			.pos-absolute {
 				position: absolute;
 			}
 			/* Position Absolute */
-			
+
 			.vertical-base {
 				vertical-align: baseline;
 			}
 			/* vertical align baseline */
-			
+
 			.vertical-top {
 				vertical-align: top;
 			}
 			/* vertical align top */
-			
+
 			nav.vertical ul li {
 				display: block;
 			}
 			/* vertical menu */
-			
+
 			nav.horizontal ul li {
 				display: inline-block;
 			}
 			/* horizontal menu */
-			
+
 			img {
 				max-width: 100%;
 			}
 			/*end reset*/
-			
+
 			body {
 				padding: 0;
 				margin: 0;
 				background: #00bcd4;
 				font-family: 'Open Sans', sans-serif !important;
 			}
-			
+
 			h1,
 			h2,
 			h3,
@@ -164,25 +164,25 @@ if (isset($_POST['btnsubmit'])) {
 			h6 {
 				margin: 0;
 			}
-			
+
 			p {
 				margin: 0;
 			}
-			
+
 			ul {
 				margin: 0;
 				padding: 0;
 			}
-			
+
 			label {
 				margin: 0;
 			}
 			/*-- main --*/
-			
+
 			.content {
 				padding: 100px;
 			}
-			
+
 			.content h1 {
 				color: #fff;
 				font-size: 40px;
@@ -190,20 +190,20 @@ if (isset($_POST['btnsubmit'])) {
 				letter-spacing: 1px;
 				font-family: 'Amaranth', sans-serif;
 			}
-			
+
 			.main {
 				width: 70%;
 				margin: 45px auto;
 				background: #fff;
 				padding: 30px 40px;
 			}
-			
+
 			p.footer {
 				color: #fff;
 				font-size: 14px;
 				text-align: center;
 			}
-			
+
 			p.footer a {
 				color: #000;
 				transition: 0.5s all;
@@ -212,7 +212,7 @@ if (isset($_POST['btnsubmit'])) {
 				-o-transition: 0.5s all;
 				-ms-transition: 0.5s all;
 			}
-			
+
 			p.footer a:hover {
 				color: #fff;
 				transition: 0.5s all;
@@ -221,7 +221,7 @@ if (isset($_POST['btnsubmit'])) {
 				-o-transition: 0.5s all;
 				-ms-transition: 0.5s all;
 			}
-			
+
 			.main form input[type="email"],
 			.main form input[type="password"] {
 				width: 100%;
@@ -232,7 +232,7 @@ if (isset($_POST['btnsubmit'])) {
 				color: #D8D5D5;
 				margin-bottom: 30px;
 			}
-			
+
 			.main h5 {
 				color: #00bcd4;
 				margin-bottom: 8px;
@@ -240,12 +240,12 @@ if (isset($_POST['btnsubmit'])) {
 				font-family: 'Josefin Slab', serif;
 				font-weight: 600;
 			}
-			
+
 			.main h5 span {
 				font-size: 15px;
 				color: #ccc;
 			}
-			
+
 			.main form input[type="email"]:hover,
 			.main textarea:hover {
 				border: 1px solid #4cc2c4;
@@ -256,7 +256,7 @@ if (isset($_POST['btnsubmit'])) {
 				-o-transition: 0.5s all;
 				-ms-transition: 0.5s all;
 			}
-			
+
 			.main form input[type="submit"] {
 				background: #00bcd4;
 				color: #FFFFFF;
@@ -271,7 +271,7 @@ if (isset($_POST['btnsubmit'])) {
 				margin-bottom: 0px;
 				text-transform: capitalize;
 			}
-			
+
 			.main form input[type="submit"]:hover {
 				background: #000;
 				border-bottom: 4px solid #403E3E;
@@ -281,7 +281,7 @@ if (isset($_POST['btnsubmit'])) {
 				-o-transition: 0.5s all;
 				-ms-transition: 0.5s all;
 			}
-			
+
 			.main textarea {
 				width: 100%;
 				padding: 10px;
@@ -295,14 +295,14 @@ if (isset($_POST['btnsubmit'])) {
 				height: 100px;
 				font-family: 'Lato', sans-serif !important;
 			}
-			
+
 			.radio-btns label {
 				font-size: 14px;
 				vertical-align: text-top;
 				margin: 0;
 			}
 			/*start-checkbox*/
-			
+
 			.checkbox {
 				padding-left: 25px;
 				color: #B6B6B6;
@@ -310,16 +310,16 @@ if (isset($_POST['btnsubmit'])) {
 				position: relative;
 				font-size: 12px;
 			}
-			
+
 			.checkbox:last-child {
 				margin-bottom: 0;
 			}
-			
+
 			.checkbox input {
 				position: absolute;
 				left: -9999px;
 			}
-			
+
 			.checkbox i {
 				position: absolute;
 				bottom: 7px;
@@ -335,7 +335,7 @@ if (isset($_POST['btnsubmit'])) {
 				-moz-border-radius: 3px;
 				-o-border-radius: 3px;
 			}
-			
+
 			.checkbox input+i:after {
 				position: absolute;
 				opacity: 0;
@@ -345,7 +345,7 @@ if (isset($_POST['btnsubmit'])) {
 				-moz-transition: opacity 0.1s;
 				-webkit-transition: opacity 0.1s;
 			}
-			
+
 			.checkbox input+i:after {
 				content: '';
 				background: url("./images/tick-mark1.png") no-repeat center;
@@ -355,21 +355,21 @@ if (isset($_POST['btnsubmit'])) {
 				height: 18px;
 				text-align: center;
 			}
-			
+
 			.form-elements li:nth-child(2) {
 				margin-left: 18px;
 				width: 37%;
 			}
-			
+
 			.checkbox input:checked+i:after {
 				opacity: 1;
 			}
-			
+
 			.checkbox input:checked+i {
 				border: 3px solid #DF1E1C;
 				background: #fff;
 			}
-			
+
 			.radio,
 			.radio1,
 			.radio2,
@@ -378,7 +378,7 @@ if (isset($_POST['btnsubmit'])) {
 				display: inline-block;
 				margin-left: 15px;
 			}
-			
+
 			.radio:first-child,
 			.radio1:first-child,
 			.radio2:first-child,
@@ -386,7 +386,7 @@ if (isset($_POST['btnsubmit'])) {
 				margin-left: 0;
 				margin: 0;
 			}
-			
+
 			.radio,
 			.radio1,
 			.radio2,
@@ -396,7 +396,7 @@ if (isset($_POST['btnsubmit'])) {
 				color: #404040;
 				cursor: pointer;
 			}
-			
+
 			.radio input[type="radio"],
 			.radio1 input[type="radio"],
 			.radio2 input[type="radio"],
@@ -404,13 +404,13 @@ if (isset($_POST['btnsubmit'])) {
 				position: absolute;
 				left: -9999px;
 			}
-			
+
 			.radio-btns label {
 				font-size: 14px;
 				color: #A5A5A5;
 				padding: 0px 0 0 2px;
 			}
-			
+
 			.radio i,
 			.radio1 i,
 			.radio2 i,
@@ -427,7 +427,7 @@ if (isset($_POST['btnsubmit'])) {
 				cursor: pointer;
 				border-radius: 100%;
 			}
-			
+
 			.radio input+i:after,
 			.radio1 input+i:after,
 			.radio2 input+i:after,
@@ -440,7 +440,7 @@ if (isset($_POST['btnsubmit'])) {
 				-moz-transition: opacity 0.1s;
 				-webkit-transition: opacity 0.1s;
 			}
-			
+
 			.radio input+i:after,
 			.radio1 input+i:after,
 			.radio2 input+i:after,
@@ -455,25 +455,25 @@ if (isset($_POST['btnsubmit'])) {
 				-moz-border-radius: 50%;
 				-o-border-radius: 50%;
 			}
-			
+
 			.radio input:checked+i:after,
 			.radio1 input:checked+i:after,
 			.radio2 input:checked+i:after,
 			.radio3 input:checked+i:after {
 				opacity: 1;
 			}
-			
+
 			.check_box {
 				float: left;
 				width: 23%;
 			}
-			
+
 			.check_box_one {
 				float: left;
 				width: 31%;
 			}
 			/*** normal state ***/
-			
+
 			.radio i,
 			.radio1 i,
 			.radio2 i,
@@ -485,7 +485,7 @@ if (isset($_POST['btnsubmit'])) {
 				-webkit-transition: border-color 0.3s;
 			}
 			/*** checked state ***/
-			
+
 			.radio input+i:after,
 			.radio1 input+i:after,
 			.radio2 input+i:after,
@@ -499,7 +499,7 @@ if (isset($_POST['btnsubmit'])) {
 				text-align: center;
 				border-radius: 100%;
 			}
-			
+
 			.radio input:checked+i,
 			.radio1 input:checked+i,
 			.radio2 input:checked+i,
@@ -507,15 +507,15 @@ if (isset($_POST['btnsubmit'])) {
 				border: 3px solid #00bcd4;
 				background: #fff;
 			}
-			
+
 			.swit {
 				margin-bottom: 30px;
 			}
-			
+
 			span.starRating {
 				margin: 5px 0 30px;
 			}
-			
+
 			.starRating:not(old) {
 				display: inline-block;
 				width: 7.5em;
@@ -523,12 +523,12 @@ if (isset($_POST['btnsubmit'])) {
 				overflow: hidden;
 				vertical-align: bottom;
 			}
-			
+
 			.starRating:not(old)>input {
 				margin-right: -100%;
 				opacity: 0;
 			}
-			
+
 			.starRating:not(old)>label {
 				display: block;
 				float: right;
@@ -536,7 +536,7 @@ if (isset($_POST['btnsubmit'])) {
 				background: url('../images/star-off.png');
 				background-size: contain;
 			}
-			
+
 			.starRating:not(old)>label:before {
 				content: '';
 				display: block;
@@ -547,7 +547,7 @@ if (isset($_POST['btnsubmit'])) {
 				opacity: 0;
 				transition: opacity 0.2s linear;
 			}
-			
+
 			.starRating:not(old)>label:hover:before,
 			.starRating:not(old)>label:hover~label:before,
 			.starRating:not(:hover)> :checked~label:before {
@@ -571,7 +571,7 @@ if (isset($_POST['btnsubmit'])) {
 							<div class="nav-inner">
 								<nav class="primary-nav">
 									<div class="clearfix nav-wrapper">
-										<a href="#home" class="left brand-logo menu-smooth-scroll" data-section="#home"><img src="images/logo.png" alt="">
+										<a href="#home" class="left brand-logo menu-smooth-scroll" data-section="#home"><img src="images/logo1.png" alt="">
 										</a>
 										<a href="#" data-activates="mobile-demo" class="button-collapse"><i class="mdi-navigation-menu"></i></a>
 										<ul class="right static-menu">
@@ -581,7 +581,7 @@ if (isset($_POST['btnsubmit'])) {
 												</a>
 											</li>
 										</ul>
-									
+
 
 
 										<ul class="inline-menu side-nav" id="mobile-demo">
@@ -609,7 +609,7 @@ if (isset($_POST['btnsubmit'])) {
 											</li>
 											<li><a href="aboutus.php" style="text-decoration: none;" data-section="#"><i class="fa fa-user fa-fw"></i>About Us</a>
 											</li>
-											
+
 										</ul>
 										<ul id="dropdown1" class="inline-menu submenu-ul dropdown-content" style="width: 25px; display: none; position: fixed; height: 50px; top: 16px; left: 1072px; opacity: 1; overflow-y: auto;">
 											<li><a href="#">Take a Tour</a>

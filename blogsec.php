@@ -2,11 +2,11 @@
 require_once 'dbconfig.php';
 if(isset($_GET['blog_id'])){
 	$blog_id = $_GET['blog_id'];
-	
+
 $qu = "SELECT * FROM blog WHERE blog_id='$blog_id'";
 
 $check = $test -> query($qu);
-	
+
 }
 
 ?>
@@ -29,7 +29,7 @@ $check = $test -> query($qu);
   <link rel="shortcut icon" href="images/favicon.png" >
 
   <!-- Stylesheets-->
-  <link rel="stylesheet" href="assets/css/normalize.css"> 
+  <link rel="stylesheet" href="assets/css/normalize.css">
   <link rel="stylesheet" href="assets/font/font-awesome/css/font-awesome.min.css">
   <link rel="stylesheet" href="assets/libs/materialize/css/materialize.min.css" media="screen,projection" />
   <link rel="stylesheet" href="assets/css/bootstrap.css" media="screen,projection" />
@@ -62,7 +62,7 @@ $check = $test -> query($qu);
             <div class="nav-inner">
               <nav class="primary-nav">
                 <div class="clearfix nav-wrapper">
-                  <a href="#home" class="left brand-logo menu-smooth-scroll" data-section="#home"><img src="images/logo.png" alt="">
+                  <a href="#home" class="left brand-logo menu-smooth-scroll" data-section="#home"><img src="images/logo1.png" alt="">
                   </a>
                   <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="mdi-navigation-menu"></i></a>
                   <ul class="right static-menu">
@@ -143,14 +143,14 @@ $check = $test -> query($qu);
 		<!-- ./Banner end -->
 
 		<!-- Blog Post Container-->
-		
+
 		<section id="all-posts" class="root-sec grey lighten-5 blogpage-posts-wrap">
 			<div class="container">
 				<div class="row">
 					<div class="clearfix all-blog-post blog-inner with-sidebar">
 
 						<!-- post container start-->
-					
+
 						<div class="col-sm-8">
 							<article class="single-post-page">
 								<div class="thumb-wrap">
@@ -185,7 +185,7 @@ $check = $test -> query($qu);
 								</div>
 
 								<div class="comment-reply-section">
-									
+
 									<div class="comment-list-wrapper">
 										<ul class="comment-list">
 											<li>
@@ -198,15 +198,15 @@ $check = $test -> query($qu);
 										</div>
 										</div>
 
-						
-													
+
+
 							</article>
 						</div>
 						<?php } } ?>
 						<!-- ./post container end-->
 
 						<!-- Sidebar start-->
-						 
+
 						<div class="col-sm-4">
 							<div class="primary-sidebar">
 								<aside class="single-widget">
@@ -267,7 +267,7 @@ $check = $test -> query($qu);
                 <a href="./terms-of-service.html" style="margin-left:10px;">Terms</a>
                 <a href="./user-policy.html" style="margin-left:10px;">User Policy</a>
             </div>
-             
+
 					</div>
 				</div>
 			</div>

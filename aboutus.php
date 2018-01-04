@@ -47,7 +47,7 @@ $check = $test -> query($qu);
       <script src="assets/js/html5shiv.js"></script>
   <![endif]-->
 
-		
+
 	</head>
 
 	<body onclick="document.getElementById('dropdown1').style.display='none'">
@@ -64,7 +64,7 @@ $check = $test -> query($qu);
 							<div class="nav-inner">
 								<nav class="primary-nav">
 									<div class="clearfix nav-wrapper">
-										<a href="#home" class="left brand-logo menu-smooth-scroll" data-section="#home"><img src="images/logo.png" alt="">
+										<a href="#home" class="left brand-logo menu-smooth-scroll" data-section="#home"><img src="images/logo1.png" alt="">
 										</a>
 										<a href="#" data-activates="mobile-demo" class="button-collapse"><i class="mdi-navigation-menu"></i></a>
 										<ul class="right static-menu">
@@ -74,7 +74,7 @@ $check = $test -> query($qu);
 												</a>
 											</li>
 										</ul>
-										
+
 
 
 										<ul class="inline-menu side-nav" id="mobile-demo">
@@ -101,7 +101,7 @@ $check = $test -> query($qu);
 											<li><a href="feedback.php" style="text-decoration: none;" data-section="#feed"><i class="fa fa-pencil fa-fw"></i>Feedback</a>
 											</li>
 											<li><a href="aboutus.php" style="text-decoration: none;" data-section="#"><i class="fa fa-user fa-fw"></i>About Us</a>
-											
+
 										</ul>
 										<ul id="dropdown1" class="inline-menu submenu-ul dropdown-content" style="width: 25px; display: none; position: fixed; height: 50px; top: 16px; left: 1072px; opacity: 1; overflow-y: auto;">
 											<li><a href="#">Take a Tour</a>
@@ -139,7 +139,7 @@ $check = $test -> query($qu);
 					</div>
 					<div class="row">
 						<div class="col-sm-6">
-							<img src="http://placehold.it/300x280">
+							<img src="http://thegateacademy.com/wp-content/uploads/2014/09/test-series.png">
 						</div>
 						<div class="row">
 							<div class="col-sm-6">

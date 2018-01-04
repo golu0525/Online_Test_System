@@ -10,9 +10,9 @@ if(isset ($_POST['btnsubmit'])){
   $mailid=$test -> real_escape_string($_POST['user_email']);
   $dob=$test -> real_escape_string($_POST['datepick']);
 
-	$reg="INSERT INTO user_data VALUES (null,'$full_name','$institute','$user_name','$password','$mailid','$dob',1,'$dob')";
-	$reigs=$test -> query($reg);
-	if(!$reigs)
+	$qur="INSERT INTO user_data VALUES (null,'$full_name','$institute','$user_name','$password','$mailid','$dob',1,'$dob')";
+	$feel=$test -> query($qur);
+	if(!$feel)
 {
    echo "error";
 }
@@ -83,11 +83,11 @@ if(isset ($_POST['btnsubmit'])){
             return false;
         }
         var y = document.forms["myForm"]["user_name"].value;
-        if (y == "") {
             alert("enter your username");
             return false;
         }
         var z = document.forms["myForm"]["user_password"].value;
+				if (y == "") {
         if (z == "") {
             alert("password???");
             return false;

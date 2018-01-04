@@ -370,7 +370,7 @@ if($rs->num_rows > 0){
           <th>Name</th>
             <th>Institute</th>
               <th>Marks Obtained</th>
-                <th>Rank</th>
+                <!--<th>Rank</th>-->
               </tr>
 <?php
         $i=0;
@@ -384,7 +384,7 @@ if($rs->num_rows > 0){
         <td><?php echo $ro['usr_name']; ?></td>
         <td><?php echo $ro['institute']; ?></td>
         <td><?php echo $ro['marks_obtained']; ?></td>
-        <td><?php echo $ro['rank']; ?></td>
+    <!--    <td><?php #echo $ro['rank']; ?></td>-->
       </tr>
     <?php } ?>
     </table>

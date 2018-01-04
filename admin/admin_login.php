@@ -35,7 +35,7 @@ if(isset($_POST['chkuser'])){
       header('Location:forgot.php');
     }
     else{
-      header('Location:panel.php');
+      header('Location:admin_login.php');
     }
   }
 

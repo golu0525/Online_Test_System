@@ -37,11 +37,11 @@ $check = $test->query($query);
   <link rel="stylesheet" href="assets/css/main.css">
   <link rel="stylesheet" href="assets/css/responsive.css">
  <link rel="stylesheet" href="assets/css/colors/color1.css">
- 
+
   <!--[if lt IE 9]>
       <script src="assets/js/html5shiv.js"></script>
   <![endif]-->
-  
+
 </head>
 
 <body onclick="document.getElementById('dropdown1').style.display='none'">
@@ -58,7 +58,7 @@ $check = $test->query($query);
             <div class="nav-inner">
               <nav class="primary-nav">
                 <div class="clearfix nav-wrapper">
-                  <a href="#home" class="left brand-logo menu-smooth-scroll" data-section="#home"><img src="images/logo.png" alt="">
+                  <a href="#home" class="left brand-logo menu-smooth-scroll" data-section="#home"><img src="images/logo1.png" alt="">
                   </a>
                   <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="mdi-navigation-menu"></i></a>
                   <ul class="right static-menu">
@@ -68,7 +68,7 @@ $check = $test->query($query);
                       </a>
                     </li>
                   </ul>
-                  
+
 
 
                   <ul class="inline-menu side-nav" id="mobile-demo">
@@ -134,7 +134,7 @@ $check = $test->query($query);
         <!-- .container end -->
 
 		</div>
-    
+
      <!-- nav down starts-->
      	<div class="section-call-to-area">
           <div class="container">
@@ -144,7 +144,7 @@ $check = $test->query($query);
               </a>
             </div>
           </div>
-         
+
         </div>
          <!-- nav down end -->
 
@@ -218,7 +218,7 @@ $check = $test->query($query);
           </div>
         </div>
       </section>
-    
+
     <!-- #resume Section end -->
     <section id="experience" class="root-sec padd-tb-120 brand-bg experience-wrap">
             <div class="container">
@@ -296,13 +296,13 @@ $check = $test->query($query);
               </div>
               </div>
                <div class="policy">
-              
+
                 <a href="privacy-policy.html" style="margin-left:10px;"><p>Privacy</a>
-              
+
                 <a href="./terms-of-service.html" style="margin-left:10px;">Terms</a>
-            
+
                 <a href="./user-policy.html" style="margin-left:10px;">User Policy</a>
-             
+
 			  </div>
           </div>
         </div>

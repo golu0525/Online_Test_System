@@ -46,9 +46,9 @@ $check = $test -> query($qu);
   <link rel="stylesheet" href="assets/css/main.css">
   <link rel="stylesheet" href="assets/css/responsive.css">
 
-  
+
   <link rel="stylesheet" href="assets/css/colors/color1.css">
- 
+
 
   <!--[if lt IE 9]>
       <script src="assets/js/html5shiv.js"></script>
@@ -69,7 +69,7 @@ $check = $test -> query($qu);
             <div class="nav-inner">
               <nav class="primary-nav">
                 <div class="clearfix nav-wrapper">
-                  <a href="#home" class="left brand-logo menu-smooth-scroll" data-section="#home"><img src="images/logo.png" alt="">
+                  <a href="#home" class="left brand-logo menu-smooth-scroll" data-section="#home"><img src="images/logo1.png" alt="">
                   </a>
                   <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="mdi-navigation-menu"></i></a>
                   <ul class="right static-menu">
@@ -105,7 +105,7 @@ $check = $test -> query($qu);
                     </li>
                     <li><a href="aboutus.php" style="text-decoration: none;" data-section="#"><i class="fa fa-user fa-fw"></i>About Us</a>
                     </li>
-                  
+
                   </ul>
                   <ul id="dropdown1" class="inline-menu submenu-ul dropdown-content" style="width: 25px; display: none; position: fixed; height: 50px; top: 16px; left: 1072px; opacity: 1; overflow-y: auto;">
                     <li><a href="#">Take a Tour</a>
@@ -125,7 +125,7 @@ $check = $test -> query($qu);
     <!-- #header  navigation end -->
     <!-- Blog Section end -->
     <section id="blog" class="scroll-section root-sec grey lighten-5 padd-tb-120 blog-wrap">
-     
+
       <div class="container">
         <div class="row">
           <div class="blog-inner">
@@ -154,7 +154,7 @@ $check = $test -> query($qu);
                           <div class="post-body">
                             <a href="blogsec.php" class="post-title-link brand-text"><h2 class="post-title"><?php echo $row['blog_title'];?></h2></a>
                             <p class="post-content"><?php echo $row['blog_para1'];?></p>
-							  
+
                           </div>
                         </div>
                       </div>
@@ -172,7 +172,7 @@ $check = $test -> query($qu);
                 </div>
                  <div class="clearfix left-align">
                   <div class="col-sm-12">
-                   
+
                     <a href="blog.php" class="waves-effect waves-light btn-large load-more">See More</a>
                   </div>
                 </div>
@@ -223,13 +223,13 @@ $check = $test -> query($qu);
               </div>
               </div>
                <div class="policy">
-              
+
                 <a href="privacy-policy.html" style="margin-left:10px;"><p>Privacy</a>
-              
+
                 <a href="./terms-of-service.html" style="margin-left:10px;">Terms</a>
-            
+
                 <a href="./user-policy.html" style="margin-left:10px;">User Policy</a>
-             
+
 			  </div>
           </div>
         </div>

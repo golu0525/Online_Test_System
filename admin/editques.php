@@ -20,7 +20,7 @@ if(isset ($_POST['btnsubmit'])){
 
 
 
-	$query="INSERT INTO questions VALUES(NULL,'$txtmodname','$txtnewques','$txtoptone','$txtopttwo','$txtoptthree','$txtoptfour',$txtposmarks,$txtnegmarks,$txtcorrect)";
+	$query="INSERT INTO questions VALUES(NULL,'$txtnewques','$txtoptone','$txtopttwo','$txtoptthree','$txtoptfour',$txtposmarks,$txtnegmarks,$txtcorrect)";
 	$SQL=$test -> query($query);
 	if(!$SQL)
 {
