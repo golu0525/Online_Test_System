@@ -74,8 +74,6 @@ input[type=text], input[type=password] {
 
         <form method="post">
 
-
-
            <input type="password" name="txtnewpassword" class="psw" placeholder="New Password" required/><br>
             <input type="password" name="txtconfirm" placeholder="Confirm Password" required/><br>
             <input type="submit" class="button" name="btnsubmit" value="Confirm Password">
